@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Pokedex</string>
+    <string name="wid">19.2dp</string>
+    <string name="title_activity_tabbed">Tabbed</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_first_fragment">Hello FIRST fragment</string>
+    <string name="hello_second_fragment">Fragmento nº 2</string>
+    <string name="hello_third_fragment">Fragmento nº 3</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+</resources>
