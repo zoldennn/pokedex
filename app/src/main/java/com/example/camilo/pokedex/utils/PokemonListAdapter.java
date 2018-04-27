@@ -18,8 +18,11 @@ import com.squareup.picasso.Picasso;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
-public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder> {
+
+public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.AdapterViewHolder> {
 
     private Context mContext;
     private List<Pokemon> mDataSet;
@@ -32,18 +35,15 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     }
 
     @Override
-    public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public AdapterViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_view, parent, false);
-        return new ViewHolder(view);
+        return new AdapterViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(AdapterViewHolder holder, int position) {
         Pokemon pokemon = mDataSet.get(position);
-
-        Picasso.with(mContext)
-                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + pokemon.getNumber() + ".png")
-                .into(holder.img);
+        Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + pokemon.getNumber() + ".png").into(holder.vPokemonPhoto);
 
         holder.bind(pokemon.getName());
     }
@@ -53,50 +53,50 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
         return mDataSet.size();
     }
 
-    // Add the new 20 incoming pokemons
-    public void addNewPokemonList(List<Pokemon> listaPokemon) {
-        mDataSet.addAll(listaPokemon);
+    // Add the new 20 incoming pokemon
+    public void addNewPokemonList(List<Pokemon> pokemonList) {
+        mDataSet.addAll(pokemonList);
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        private ImageView img;
-        private TextView idPoke, namePoke;
+    public class AdapterViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.pokemon_list_image)
+        ImageView vPokemonPhoto;
+        @BindView(R.id.viewPid)
+        TextView vPokemonID;
+        @BindView(R.id.viewName)
+        TextView vPokemonName;
 
-        public ViewHolder(View itemView) {
+        private AdapterViewHolder(View itemView) {
             super(itemView);
-
-            img = itemView.findViewById(R.id.viewImg);
-            idPoke = itemView.findViewById(R.id.viewPid);
-            namePoke = itemView.findViewById(R.id.viewName);
+            ButterKnife.bind(this, itemView);
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    mPokemonService.onPokemonItemClick(mDataSet.get(getAdapterPosition()), getAdapterPosition(), img);
+                    mPokemonService.onPokemonItemClick(mDataSet.get(getAdapterPosition()), getAdapterPosition(), vPokemonPhoto);
                 }
             });
-
         }
 
-        public void bind(final String name) {
+        private void bind(final String name) {
             int cont = getAdapterPosition() + 1;
+
             if (cont < 10) {
-                this.idPoke.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_2), cont));
+                this.vPokemonID.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_2), cont));
             } else {
                 if (cont < 100) {
-                    this.idPoke.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_1), cont));
+                    this.vPokemonID.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_1), cont));
                 } else {
-                    this.idPoke.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_0), cont));
+                    this.vPokemonID.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_0), cont));
                 }
             }
-            this.namePoke.setText(name);
-
+            this.vPokemonName.setText(name);
             final AssetManager assets = mContext.getAssets();
             final Typeface tvFont = Typeface.createFromAsset(assets, "fonts/roboli.ttf");
-            idPoke.setTypeface(tvFont);
-            namePoke.setTypeface(tvFont);
-        }
 
+            vPokemonID.setTypeface(tvFont);
+            vPokemonName.setTypeface(tvFont);
+        }
     }
 }

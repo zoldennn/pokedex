@@ -18,7 +18,7 @@
         android:textStyle="bold" />
 
     <ImageView
-        android:id="@+id/viewImg"
+        android:id="@+id/pokemon_list_image"
         android:layout_width="96dp"
         android:layout_height="96dp"
         android:layout_gravity="center_horizontal" />

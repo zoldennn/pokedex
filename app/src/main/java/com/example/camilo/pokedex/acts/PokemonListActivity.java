@@ -8,76 +8,44 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.camilo.pokedex.PokemonListFetcher;
 import com.example.camilo.pokedex.PokemonService;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.models.Pokemon;
-import com.example.camilo.pokedex.utils.LoadingDialog;
 import com.example.camilo.pokedex.utils.PokemonListAdapter;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import retrofit2.Retrofit;
+import butterknife.BindView;
 
-public class PokemonListActivity extends AppCompatActivity implements PokemonService{
 
-    private Retrofit retrofit;
-    public ArrayList<Pokemon> listaPokemon;
-    private RecyclerView recyclerView;
-    private PokemonListAdapter listaPokemonAdapter;
-    private int offset;
-    public static boolean aptoParaCargar;
-    private GridLayoutManager layoutManager;
-    public TextView cargando, title;
-    public LoadingDialog dialog;
-    private PokemonListFetcher listFetcher;
+public class PokemonListActivity extends AppCompatActivity implements PokemonService {
+
+    @BindView(R.id.pokemon_list_recyclerview)
+    RecyclerView mPokemonListRecyclerView;
+    private PokemonListAdapter mPokemonListAdapter;
+    private int mOffset;
+    public static boolean mMustCharge;
+    private GridLayoutManager mLayoutManager;
+    private PokemonListFetcher mPokemonListFetcher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        recyclerView = findViewById(R.id.pokemon_list_recyclerview);
 
-        listFetcher = new PokemonListFetcher(this);
-        listaPokemonAdapter = new PokemonListAdapter(this,this);
+        setupRecyclerView();
 
-        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-
-                if (dy > 0) {
-                    int visibleItemCount = layoutManager.getChildCount();
-                    int totalItemCount = layoutManager.getItemCount();
-                    int pastVisibleItems = layoutManager.findFirstVisibleItemPosition();
-
-                    if (aptoParaCargar) {
-                        if (visibleItemCount + pastVisibleItems >= totalItemCount) {
-                            aptoParaCargar = false;
-                            offset += 20;
-                            listFetcher.callPokemonApi(PokemonListActivity.this, offset, listaPokemonAdapter);
-                        }
-                    }
-                }
-            }
-        });
-        //APLICO EL ADAPTER Y CONTROLO CUÁNDO SE LLEGÓ AL FINAL DEL RECYCLERVIEW
-        recyclerView.setHasFixedSize(true);
-        layoutManager = new GridLayoutManager(this, 3);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(listaPokemonAdapter);
-
-        aptoParaCargar = true;
-        offset = 0;
-        listFetcher.callPokemonApi(this, offset, listaPokemonAdapter);
+        mMustCharge = true;
+        mOffset = 0;
+        mPokemonListFetcher.callPokemonApi(this, mOffset, mPokemonListAdapter);
     }
 
     @Override
-    public void renderPokemons(List<Pokemon> pokemonList) {
-        setupRecyclerView(pokemonList);
+    public void renderPokemonList(List<Pokemon> pokemonList) {
+        mPokemonListAdapter.addNewPokemonList(pokemonList);
     }
 
     @Override
@@ -85,21 +53,45 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         Intent intent = new Intent(PokemonListActivity.this, EstadoPokemon.class);
         intent.putExtra("name", pokemon.getName());
         intent.putExtra("pos", pos);
-        if (img.getDrawable() != null)  //CONTROLAR QUE AL CLICKEAR SE HAYA CARGADO LA IMAGEN
+
+        if (img.getDrawable() != null)  // Check if the image
         {
             Bitmap bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
             intent.putExtra("img", bitmap);
             startActivity(intent);
         } else {
-            //intent.putExtra("img","null");
+            Toast.makeText(this, "Espera que la imagen cargue!", Toast.LENGTH_SHORT).show();
         }
     }
 
-    private void setupRecyclerView(List<Pokemon> list) {
-        //listaPokemonAdapter.addNewPokemonList(list);
+    private void setupRecyclerView(){
+        mPokemonListFetcher = new PokemonListFetcher(this);
+        mPokemonListAdapter = new PokemonListAdapter(this, this);
 
+        mPokemonListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
 
-        listaPokemonAdapter.addNewPokemonList(list);
+                if (dy > 0) {
+                    int visibleItemCount = mLayoutManager.getChildCount();
+                    int totalItemCount = mLayoutManager.getItemCount();
+                    int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
 
+                    // Checks if must charge Pokemons and if the recyclerView has reached the bottom
+                    if (mMustCharge && visibleItemCount + pastVisibleItems >= totalItemCount) {
+                        mMustCharge = false;
+                        mOffset += 20;
+                        mPokemonListFetcher.callPokemonApi(PokemonListActivity.this, mOffset, mPokemonListAdapter);
+
+                    }
+                }
+            }
+        });
+        // Apply recyclerView specs
+        mPokemonListRecyclerView.setHasFixedSize(true);
+        mLayoutManager = new GridLayoutManager(this, 3);
+        mPokemonListRecyclerView.setLayoutManager(mLayoutManager);
+        mPokemonListRecyclerView.setAdapter(mPokemonListAdapter);
     }
 }

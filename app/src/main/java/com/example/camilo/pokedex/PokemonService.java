@@ -7,7 +7,7 @@ import com.example.camilo.pokedex.models.Pokemon;
 import java.util.List;
 
 public interface PokemonService {
-    void renderPokemons(List<Pokemon> pokemonList);
+    void renderPokemonList(List<Pokemon> pokemonList);
 
     void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img);
 }
