@@ -1,16 +1,16 @@
 package com.example.camilo.pokedex.models;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class PokemonRespuesta {
 
-    private ArrayList<Pokemon> results;
+    private List<Pokemon> results;
 
-    public ArrayList<Pokemon> getResults() {
+    public List<Pokemon> getResults() {
         return results;
     }
 
-    public void setResults(ArrayList<Pokemon> results) {
+    public void setResults(List<Pokemon> results) {
         this.results = results;
     }
 }

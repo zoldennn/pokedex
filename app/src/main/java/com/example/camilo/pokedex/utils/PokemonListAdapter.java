@@ -15,17 +15,18 @@ import com.example.camilo.pokedex.models.Pokemon;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
-public class ListaPokemonAdapter extends RecyclerView.Adapter<ListaPokemonAdapter.ViewHolder> {
+public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder> {
 
     private Context context;
-    private ArrayList<Pokemon> dataset;
+    private List<Pokemon> dataset;
     private int layout;
     private OnItemClickListener itemClickListener;
 
 
-    public ListaPokemonAdapter(Context context, int layout, OnItemClickListener listener)
+    public PokemonListAdapter(Context context, int layout, OnItemClickListener listener)
     {
         this.context = context;
         this.layout = layout;
@@ -57,7 +58,7 @@ public class ListaPokemonAdapter extends RecyclerView.Adapter<ListaPokemonAdapte
     }
 
     //AGREGO LOS NUEVOS 20 POKEMONES QUE ME LLEGARON AL CARGAR
-    public void adicionarPokemon(ArrayList<Pokemon> listaPokemon) {
+    public void adicionarPokemon(List<Pokemon> listaPokemon) {
         dataset.addAll(listaPokemon);
         notifyDataSetChanged();
     }
@@ -111,6 +112,11 @@ public class ListaPokemonAdapter extends RecyclerView.Adapter<ListaPokemonAdapte
 
     public interface OnItemClickListener{
         void onItemClick(String name, int position, ImageView img);
+    }
+
+    public void setNewList(List<Pokemon> newList){
+        dataset = newList;
+        notifyDataSetChanged();
     }
 
 }

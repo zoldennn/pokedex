@@ -5,11 +5,11 @@ import android.os.Bundle;
 
 import com.example.camilo.pokedex.R;
 
-public class Dialog extends android.app.Dialog{
+public class LoadingDialog extends android.app.Dialog{
 
     public Activity c;
 
-    public Dialog(Activity a) {
+    public LoadingDialog(Activity a) {
         super(a);
         this.c=a;
     }

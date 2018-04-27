@@ -18,7 +18,7 @@ import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.services.Service;
 import com.example.camilo.pokedex.deserializers.Deserializer;
 import com.example.camilo.pokedex.models.Pokemon;
-import com.example.camilo.pokedex.utils.Dialog;
+import com.example.camilo.pokedex.utils.LoadingDialog;
 import com.google.gson.GsonBuilder;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -38,7 +38,7 @@ public class firstFragment extends Fragment{
     public ProgressBar barHP,barATK,barDEF,barSATK,barSDEF,barSPD;
     public Bitmap bitmapp;
     public static int idComp, id2, valorHP,valorATK, valorDEF, valorSATK, valorSDEF, valorSPD, control=1;
-    public Dialog dialog;
+    public LoadingDialog loadingDialog;
     public ImageButton mas;
 
     public firstFragment() {
@@ -171,14 +171,14 @@ public class firstFragment extends Fragment{
         Service service = retrofit.create(Service.class);
 
         //CREAR Y MOSTRAR DIÁLOGO DE CARGA
-        dialog = new  Dialog(getActivity());
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.dialog);
-        cargando = dialog.findViewById(R.id.cargando);
+        loadingDialog = new LoadingDialog(getActivity());
+        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loadingDialog.setContentView(R.layout.dialog);
+        cargando = loadingDialog.findViewById(R.id.cargando);
         cargando.setTypeface(t2);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.setCancelable(false);
-        dialog.show();
+        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loadingDialog.setCancelable(false);
+        loadingDialog.show();
 
         //LLAMADA A LA API
         Call<Pokemon> pokemonCall = service.getPokemon(id2);
@@ -271,12 +271,12 @@ public class firstFragment extends Fragment{
 
                 }
                 //TERMINÓ LA CARGA, CERRAR DIALOG
-                dialog.dismiss();
+                loadingDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<Pokemon> call, Throwable t) {
-                dialog.dismiss();
+                loadingDialog.dismiss();
                 begin();
                 cargando.setText("Reintentando conexión..");
             }
