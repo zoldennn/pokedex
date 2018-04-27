@@ -33,28 +33,28 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/viewID"
+            android:id="@+id/tv_pokemon_details_id"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            android:text="TextView"
+            tools:text="#002"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
 
         <ImageView
-            android:id="@+id/viewIMG"
+            android:id="@+id/img_pokemon_details_photo"
             android:layout_width="match_parent"
             android:layout_height="130dp"
             android:background="@null"
             android:scaleType="fitCenter" />
 
         <TextView
-            android:id="@+id/viewNAME"
+            android:id="@+id/tv_pokemon_details_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="TextView"
+            tools:text="Bulbasaur"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
             android:textSize="20sp" />
@@ -67,13 +67,13 @@
             android:orientation="horizontal">
 
             <ImageView
-                android:id="@+id/viewTYPE1"
+                android:id="@+id/tv_pokemon_details_type1"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:scaleType="fitCenter" />
 
             <ImageView
-                android:id="@+id/viewTYPE2"
+                android:id="@+id/tv_pokemon_details_type2"
                 android:layout_width="55dp"
                 android:layout_height="55dp"
                 android:scaleType="fitCenter" />
@@ -91,7 +91,7 @@
                 android:gravity="center_horizontal">
 
                 <TextView
-                    android:id="@+id/hp"
+                    android:id="@+id/tv_pokemon_details_hp_title"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:gravity="center"
@@ -100,7 +100,7 @@
                     android:textSize="16sp" />
 
                 <ProgressBar
-                    android:id="@+id/progressHP"
+                    android:id="@+id/pb_pokemon_details_hp"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="180dp"
                     android:layout_height="30dp"
@@ -116,7 +116,7 @@
                 android:gravity="center_horizontal">
 
                 <TextView
-                    android:id="@+id/atk"
+                    android:id="@+id/tv_pokemon_details_atk_title"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:gravity="center"
@@ -125,7 +125,7 @@
                     android:textSize="16sp" />
 
                 <ProgressBar
-                    android:id="@+id/progressATK"
+                    android:id="@+id/pb_pokemon_details_atk"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="180dp"
                     android:layout_height="30dp"
@@ -140,7 +140,7 @@
                 android:gravity="center_horizontal">
 
                 <TextView
-                    android:id="@+id/def"
+                    android:id="@+id/tv_pokemon_details_def_title"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:gravity="center"
@@ -149,7 +149,7 @@
                     android:textSize="16sp" />
 
                 <ProgressBar
-                    android:id="@+id/progressDEF"
+                    android:id="@+id/pb_pokemon_details_def"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="180dp"
                     android:layout_height="30dp"
@@ -164,7 +164,7 @@
                 android:gravity="center_horizontal">
 
                 <TextView
-                    android:id="@+id/xp"
+                    android:id="@+id/tv_pokemon_details_sa_title"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:gravity="center"
@@ -173,7 +173,7 @@
                     android:textSize="16sp" />
 
                 <ProgressBar
-                    android:id="@+id/progressXP"
+                    android:id="@+id/pb_pokemon_details_sa"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="180dp"
                     android:layout_height="30dp"
@@ -188,7 +188,7 @@
                 android:gravity="center_horizontal">
 
                 <TextView
-                    android:id="@+id/wt"
+                    android:id="@+id/tv_pokemon_details_sd_title"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:gravity="center"
@@ -197,7 +197,7 @@
                     android:textSize="16sp" />
 
                 <ProgressBar
-                    android:id="@+id/progressWT"
+                    android:id="@+id/pb_pokemon_details_sd"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="180dp"
                     android:layout_height="30dp"
@@ -212,7 +212,7 @@
                 android:gravity="center_horizontal">
 
                 <TextView
-                    android:id="@+id/ht"
+                    android:id="@+id/tv_pokemon_details_spd_title"
                     android:layout_width="40dp"
                     android:layout_height="30dp"
                     android:gravity="center"
@@ -221,7 +221,7 @@
                     android:textSize="16sp" />
 
                 <ProgressBar
-                    android:id="@+id/progressHT"
+                    android:id="@+id/pb_pokemon_details_spd"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="180dp"
                     android:layout_height="30dp"

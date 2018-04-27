@@ -1,4 +1,4 @@
-package com.example.camilo.pokedex.utils;
+package com.example.camilo.pokedex.adapters;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.camilo.pokedex.PokemonService;
+import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.squareup.picasso.Picasso;

@@ -8,7 +8,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
-public interface Service {
+public interface ApiCallService {
 
     @GET("pokemon")
     Call<PokemonResponse> obtenerListaPokemon(@Query("limit") int limit, @Query("offset") int offset);

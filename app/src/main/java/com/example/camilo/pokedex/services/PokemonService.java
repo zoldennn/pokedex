@@ -1,4 +1,4 @@
-package com.example.camilo.pokedex;
+package com.example.camilo.pokedex.services;
 
 import android.widget.ImageView;
 

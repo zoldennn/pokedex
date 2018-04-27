@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.example.camilo.pokedex.R;
+import com.example.camilo.pokedex.utils.Utils;
 
 public class EstadoPokemon extends AppCompatActivity  {
 
@@ -29,13 +30,13 @@ public class EstadoPokemon extends AppCompatActivity  {
 
         //OBTENER ID, IMAGEN Y NOMBRE DEL POKEMON CLICKEADO PARA AHORRAR DATOS Y NO VOLVER A LLAMAR API
         Intent intent = getIntent();
-        bitmap = intent.getParcelableExtra("img");
+        bitmap = intent.getParcelableExtra(Utils.EXTRA_POKEMON_IMAGE);
         try {
-            id = intent.getExtras().getInt("pos");
+            id = intent.getExtras().getInt(Utils.EXTRA_POKEMON_ID);
         }catch (Exception e){
             Toast.makeText(this, ""+e, Toast.LENGTH_SHORT).show();
         }
-        nameP = intent.getExtras().getString("name");
+        nameP = intent.getExtras().getString(Utils.EXTRA_POKEMON_NAME);
 
         BottomNavigationView bottomNavigationView;
 

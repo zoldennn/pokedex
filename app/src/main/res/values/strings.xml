@@ -7,6 +7,7 @@
     <string name="pokemon_id_plus_0">#</string>
     <string name="pokemon_id_plus_1">#0</string>
     <string name="pokemon_id_plus_2">#00</string>
+    <string name="pokemon_list_image_msg">Espera que la imagen cargue!</string>
 
 
     <!-- TODO: Remove or change this placeholder text -->

@@ -1,4 +1,4 @@
-package com.example.camilo.pokedex;
+package com.example.camilo.pokedex.utils;
 
 import android.app.Activity;
 import android.graphics.drawable.ColorDrawable;
@@ -6,12 +6,14 @@ import android.view.Window;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.acts.PokemonListActivity;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.models.PokemonResponse;
-import com.example.camilo.pokedex.services.Service;
-import com.example.camilo.pokedex.utils.LoadingDialog;
-import com.example.camilo.pokedex.utils.PokemonListAdapter;
+import com.example.camilo.pokedex.services.PokemonService;
+import com.example.camilo.pokedex.services.ApiCallService;
+import com.example.camilo.pokedex.dialogs.LoadingDialog;
+import com.example.camilo.pokedex.adapters.PokemonListAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,8 +43,8 @@ public class PokemonListFetcher {
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         // Get 20 pokemon list to adapter
-        Service service = retrofit.create(Service.class);
-        Call<PokemonResponse> pokemonResponseCall = service.obtenerListaPokemon(20, offset);
+        ApiCallService apiCallService = retrofit.create(ApiCallService.class);
+        Call<PokemonResponse> pokemonResponseCall = apiCallService.obtenerListaPokemon(20, offset);
 
         // Create loading Dialog
         final LoadingDialog loadingDialog = new LoadingDialog(activity);

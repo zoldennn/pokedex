@@ -15,11 +15,13 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.example.camilo.pokedex.R;
-import com.example.camilo.pokedex.services.Service;
+import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.deserializers.Deserializer;
 import com.example.camilo.pokedex.models.Pokemon;
-import com.example.camilo.pokedex.utils.LoadingDialog;
+import com.example.camilo.pokedex.dialogs.LoadingDialog;
 import com.google.gson.GsonBuilder;
+
+import butterknife.BindView;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -32,6 +34,7 @@ import static com.example.camilo.pokedex.acts.EstadoPokemon.t2;
 public class firstFragment extends Fragment{
 
     private Retrofit retrofit;
+
     private TextView cargando, idPoke,name,hp,atk,def,spd,sdf,satk;
     public ImageView img,type,type2;
     public static String namePoke, tipo1, tipo2;
@@ -50,33 +53,33 @@ public class firstFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_first, container, false);
+        View view = inflater.inflate(R.layout.pokemon_details_fragment, container, false);
 
         idComp = id2;
         id2 = EstadoPokemon.id;
         namePoke = EstadoPokemon.nameP;
         bitmapp = EstadoPokemon.bitmap;
 
-        idPoke = view.findViewById(R.id.viewID);
-        name = view.findViewById(R.id.viewNAME);
-        type = view.findViewById(R.id.viewTYPE1);
-        type2 = view.findViewById(R.id.viewTYPE2);
-        img = view.findViewById(R.id.viewIMG);
+        idPoke = view.findViewById(R.id.tv_pokemon_details_id);
+        name = view.findViewById(R.id.tv_pokemon_details_name);
+        type = view.findViewById(R.id.tv_pokemon_details_type1);
+        type2 = view.findViewById(R.id.tv_pokemon_details_type2);
+        img = view.findViewById(R.id.img_pokemon_details_photo);
         //desc = view.findViewById(R.id.viewDESC);
 
-        hp = view.findViewById(R.id.hp);
-        atk = view.findViewById(R.id.atk);
-        def = view.findViewById(R.id.def);
-        satk = view.findViewById(R.id.ht);
-        sdf = view.findViewById(R.id.wt);
-        spd = view.findViewById(R.id.xp);
+        hp = view.findViewById(R.id.tv_pokemon_details_hp_title);
+        atk = view.findViewById(R.id.tv_pokemon_details_atk_title);
+        def = view.findViewById(R.id.tv_pokemon_details_def_title);
+        satk = view.findViewById(R.id.tv_pokemon_details_spd_title);
+        sdf = view.findViewById(R.id.tv_pokemon_details_sd_title);
+        spd = view.findViewById(R.id.tv_pokemon_details_sa_title);
 
-        barHP = view.findViewById(R.id.progressHP);
-        barATK = view.findViewById(R.id.progressATK);
-        barDEF = view.findViewById(R.id.progressDEF);
-        barSATK = view.findViewById(R.id.progressXP);
-        barSDEF = view.findViewById(R.id.progressWT);
-        barSPD = view.findViewById(R.id.progressHT);
+        barHP = view.findViewById(R.id.pb_pokemon_details_hp);
+        barATK = view.findViewById(R.id.pb_pokemon_details_atk);
+        barDEF = view.findViewById(R.id.pb_pokemon_details_def);
+        barSATK = view.findViewById(R.id.pb_pokemon_details_sa);
+        barSDEF = view.findViewById(R.id.pb_pokemon_details_sd);
+        barSPD = view.findViewById(R.id.pb_pokemon_details_spd);
         mas = view.findViewById(R.id.mas);
 
         //CAMBIAR ENTRE NUMEROS Y LETRAS
@@ -168,7 +171,7 @@ public class firstFragment extends Fragment{
                 .addConverterFactory(GsonConverterFactory.create(builder.create()))
                 .build();
 
-        Service service = retrofit.create(Service.class);
+        ApiCallService apiCallService = retrofit.create(ApiCallService.class);
 
         //CREAR Y MOSTRAR DIÁLOGO DE CARGA
         loadingDialog = new LoadingDialog(getActivity());
@@ -181,7 +184,7 @@ public class firstFragment extends Fragment{
         loadingDialog.show();
 
         //LLAMADA A LA API
-        Call<Pokemon> pokemonCall = service.getPokemon(id2);
+        Call<Pokemon> pokemonCall = apiCallService.getPokemon(id2);
         pokemonCall.enqueue(new Callback<Pokemon>() {
             @Override
             public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {

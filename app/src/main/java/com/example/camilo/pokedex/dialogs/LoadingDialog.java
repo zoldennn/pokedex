@@ -1,4 +1,4 @@
-package com.example.camilo.pokedex.utils;
+package com.example.camilo.pokedex.dialogs;
 
 import android.app.Activity;
 import android.os.Bundle;
