@@ -63,7 +63,7 @@ public class PokemonListFetcher {
                 if (response.isSuccessful()) {
                     PokemonRespuesta pokemonRespuesta = response.body();
                     mPokemonList = pokemonRespuesta.getResults();
-                    //adapter.adicionarPokemon(mPokemonList);
+                    //adapter.addNewPokemonList(mPokemonList);
                     mPokemonService.renderPokemons(mPokemonList);
                     Log.d("TAG", "SUCCESS API");
                     //loadingDialog.dismiss();

@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,25 +42,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         recyclerView = findViewById(R.id.pokemon_list_recyclerview);
 
         listFetcher = new PokemonListFetcher(this);
-        listaPokemonAdapter = new PokemonListAdapter(this, R.layout.list_view, new PokemonListAdapter.OnItemClickListener() {
-
-            //AL CLICKEAR EN UN ELEMENTO DEL RECYCLERVIEW SE GUARDAN DATOS BASICOS PARA AHORRAR DATOS
-            @Override
-            public void onItemClick(String name, int position, ImageView img) {
-                int pos = position + 1;  //SUMAR UNO PORQUE EL ADAPTER ARRANCA EN 0
-                Intent intent = new Intent(PokemonListActivity.this, EstadoPokemon.class);
-                intent.putExtra("name", name);
-                intent.putExtra("pos", pos);
-                if (img.getDrawable() != null)  //CONTROLAR QUE AL CLICKEAR SE HAYA CARGADO LA IMAGEN
-                {
-                    Bitmap bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
-                    intent.putExtra("img", bitmap);
-                    startActivity(intent);
-                } else {
-                    //intent.putExtra("img","null");
-                }
-            }
-        });
+        listaPokemonAdapter = new PokemonListAdapter(this,this);
 
         recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -99,11 +80,26 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         setupRecyclerView(pokemonList);
     }
 
+    @Override
+    public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
+        Intent intent = new Intent(PokemonListActivity.this, EstadoPokemon.class);
+        intent.putExtra("name", pokemon.getName());
+        intent.putExtra("pos", pos);
+        if (img.getDrawable() != null)  //CONTROLAR QUE AL CLICKEAR SE HAYA CARGADO LA IMAGEN
+        {
+            Bitmap bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
+            intent.putExtra("img", bitmap);
+            startActivity(intent);
+        } else {
+            //intent.putExtra("img","null");
+        }
+    }
+
     private void setupRecyclerView(List<Pokemon> list) {
-        //listaPokemonAdapter.adicionarPokemon(list);
+        //listaPokemonAdapter.addNewPokemonList(list);
 
 
-        listaPokemonAdapter.adicionarPokemon(list);
+        listaPokemonAdapter.addNewPokemonList(list);
 
     }
 }

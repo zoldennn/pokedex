@@ -4,6 +4,10 @@
     <string name="title_activity_tabbed">Tabbed</string>
     <string name="action_settings">Settings</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="pokemon_id_plus_0">#</string>
+    <string name="pokemon_id_plus_1">#0</string>
+    <string name="pokemon_id_plus_2">#00</string>
+
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_first_fragment">Hello FIRST fragment</string>

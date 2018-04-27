@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.camilo.pokedex.PokemonService;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.squareup.picasso.Picasso;
@@ -20,18 +21,14 @@ import java.util.List;
 
 public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.ViewHolder> {
 
-    private Context context;
-    private List<Pokemon> dataset;
-    private int layout;
-    private OnItemClickListener itemClickListener;
+    private Context mContext;
+    private List<Pokemon> mDataSet;
+    private PokemonService mPokemonService;
 
-
-    public PokemonListAdapter(Context context, int layout, OnItemClickListener listener)
-    {
-        this.context = context;
-        this.layout = layout;
-        this.itemClickListener = listener;
-        dataset = new ArrayList<>();
+    public PokemonListAdapter(Context context, PokemonService listener) {
+        this.mContext = context;
+        this.mPokemonService = listener;
+        mDataSet = new ArrayList<>();
     }
 
     @Override
@@ -42,30 +39,29 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Pokemon pokemon = dataset.get(position);
+        Pokemon pokemon = mDataSet.get(position);
 
-        Picasso.with(context)
-                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"+ pokemon.getNumber() +".png")
+        Picasso.with(mContext)
+                .load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + pokemon.getNumber() + ".png")
                 .into(holder.img);
 
-        holder.bind(pokemon.getName(), itemClickListener, holder.img);
-
+        holder.bind(pokemon.getName());
     }
 
     @Override
     public int getItemCount() {
-        return dataset.size();
+        return mDataSet.size();
     }
 
-    //AGREGO LOS NUEVOS 20 POKEMONES QUE ME LLEGARON AL CARGAR
-    public void adicionarPokemon(List<Pokemon> listaPokemon) {
-        dataset.addAll(listaPokemon);
+    // Add the new 20 incoming pokemons
+    public void addNewPokemonList(List<Pokemon> listaPokemon) {
+        mDataSet.addAll(listaPokemon);
         notifyDataSetChanged();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public class ViewHolder extends RecyclerView.ViewHolder {
         private ImageView img;
-        private TextView idPoke,namePoke;
+        private TextView idPoke, namePoke;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -74,49 +70,33 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
             idPoke = itemView.findViewById(R.id.viewPid);
             namePoke = itemView.findViewById(R.id.viewName);
 
-        }
-
-        public void bind(final String name, final OnItemClickListener listener, final ImageView img)
-        {
-            int cont = getAdapterPosition()+1;
-            if(cont<10)
-            {
-                this.idPoke.setText("#00"+cont);
-            }
-            else
-            {
-                if(cont<100)
-                {
-                    this.idPoke.setText("#0"+cont);
-                }
-                else
-                {
-                    this.idPoke.setText("#"+cont);
-                }
-            }
-            this.namePoke.setText(name);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    listener.onItemClick(name, getAdapterPosition(), img);
+                    mPokemonService.onPokemonItemClick(mDataSet.get(getAdapterPosition()), getAdapterPosition(), img);
                 }
             });
 
-            final AssetManager assets = context.getAssets();
+        }
+
+        public void bind(final String name) {
+            int cont = getAdapterPosition() + 1;
+            if (cont < 10) {
+                this.idPoke.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_2), cont));
+            } else {
+                if (cont < 100) {
+                    this.idPoke.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_1), cont));
+                } else {
+                    this.idPoke.setText(String.format("%s%s", mContext.getString(R.string.pokemon_id_plus_0), cont));
+                }
+            }
+            this.namePoke.setText(name);
+
+            final AssetManager assets = mContext.getAssets();
             final Typeface tvFont = Typeface.createFromAsset(assets, "fonts/roboli.ttf");
             idPoke.setTypeface(tvFont);
             namePoke.setTypeface(tvFont);
         }
 
     }
-
-    public interface OnItemClickListener{
-        void onItemClick(String name, int position, ImageView img);
-    }
-
-    public void setNewList(List<Pokemon> newList){
-        dataset = newList;
-        notifyDataSetChanged();
-    }
-
 }
