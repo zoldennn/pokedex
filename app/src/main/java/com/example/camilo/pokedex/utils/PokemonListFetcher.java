@@ -46,15 +46,6 @@ public class PokemonListFetcher {
         ApiCallService apiCallService = retrofit.create(ApiCallService.class);
         Call<PokemonResponse> pokemonResponseCall = apiCallService.obtenerListaPokemon(20, offset);
 
-        // Create loading Dialog
-        final LoadingDialog loadingDialog = new LoadingDialog(activity);
-        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        loadingDialog.setContentView(R.layout.dialog);
-        TextView loadingMsg = loadingDialog.findViewById(R.id.cargando);
-        loadingMsg.setTypeface(t2);
-        Objects.requireNonNull(loadingDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        loadingDialog.show();
-
         pokemonResponseCall.enqueue(new Callback<PokemonResponse>() {
             @Override
             public void onResponse(Call<PokemonResponse> call, Response<PokemonResponse> response) {
@@ -63,7 +54,6 @@ public class PokemonListFetcher {
                     PokemonResponse pokemonResponse = response.body();
                     mPokemonList = pokemonResponse.getResults();
                     mPokemonService.renderPokemonList(mPokemonList);
-                    loadingDialog.dismiss();
                 } else {
                     Toast.makeText(activity, "Se detectó un problema de conexión", Toast.LENGTH_SHORT).show();
                 }
@@ -72,7 +62,6 @@ public class PokemonListFetcher {
             @Override
             public void onFailure(Call<PokemonResponse> call, Throwable t) {
                 // If error, call API again
-                loadingDialog.dismiss();
                 PokemonListActivity.mMustCharge = true;
                 callPokemonApi(activity, offset, adapter);
             }

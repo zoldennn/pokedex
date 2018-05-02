@@ -3,24 +3,31 @@ package com.example.camilo.pokedex.acts;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.adapters.PokemonListAdapter;
+import com.example.camilo.pokedex.dialogs.LoadingDialog;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonListFetcher;
 import com.example.camilo.pokedex.utils.Utils;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.camilo.pokedex.acts.EstadoPokemon.t2;
 
 
 public class PokemonListActivity extends AppCompatActivity implements PokemonService {
@@ -32,6 +39,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
     public static boolean mMustCharge;
     private GridLayoutManager mLayoutManager;
     private PokemonListFetcher mPokemonListFetcher;
+    private LoadingDialog mLoadingDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,12 +51,21 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
 
         mMustCharge = true;
         mOffset = 0;
+        // Create loading Dialog
+        mLoadingDialog = new LoadingDialog(this);
+        mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mLoadingDialog.setContentView(R.layout.dialog);
+        TextView loadingMsg = mLoadingDialog.findViewById(R.id.cargando);
+        loadingMsg.setTypeface(t2);
+        Objects.requireNonNull(mLoadingDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mLoadingDialog.show();
         mPokemonListFetcher.callPokemonApi(this, mOffset, mPokemonListAdapter);
     }
 
     @Override
     public void renderPokemonList(List<Pokemon> pokemonList) {
         mPokemonListAdapter.addNewPokemonList(pokemonList);
+        mLoadingDialog.dismiss();
     }
 
     @Override
