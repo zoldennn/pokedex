@@ -1,23 +1,17 @@
 package com.example.camilo.pokedex.utils;
 
-import android.app.Activity;
-import android.graphics.drawable.ColorDrawable;
-import android.view.Window;
-import android.widget.TextView;
+import android.content.Context;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
-import com.example.camilo.pokedex.R;
-import com.example.camilo.pokedex.acts.PokemonListActivity;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.models.PokemonResponse;
-import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.services.ApiCallService;
-import com.example.camilo.pokedex.dialogs.LoadingDialog;
-import com.example.camilo.pokedex.adapters.PokemonListAdapter;
+import com.example.camilo.pokedex.services.PokemonService;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,18 +19,22 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-import static com.example.camilo.pokedex.acts.EstadoPokemon.t2;
+import static com.example.camilo.pokedex.acts.PokemonListActivity.mMustCharge;
 
 public class PokemonListFetcher {
 
     private List<Pokemon> mPokemonList = new ArrayList<>();
     private PokemonService mPokemonService;
+    private int mOffset;
+    private Context mContext;
 
-    public PokemonListFetcher(PokemonService listener) {
+    public PokemonListFetcher(Context context, int offset, PokemonService listener) {
+        mContext = context;
+        mOffset = offset;
         mPokemonService = listener;
     }
 
-    public void callPokemonApi(final Activity activity, final int offset, final PokemonListAdapter adapter) {
+    public void callPokemonApi() {
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")
@@ -44,26 +42,48 @@ public class PokemonListFetcher {
                 .build();
         // Get 20 pokemon list to adapter
         ApiCallService apiCallService = retrofit.create(ApiCallService.class);
-        Call<PokemonResponse> pokemonResponseCall = apiCallService.obtenerListaPokemon(20, offset);
+        Call<PokemonResponse> pokemonResponseCall = apiCallService.obtenerListaPokemon(20, mOffset);
 
         pokemonResponseCall.enqueue(new Callback<PokemonResponse>() {
             @Override
             public void onResponse(Call<PokemonResponse> call, Response<PokemonResponse> response) {
-                PokemonListActivity.mMustCharge = true;
+                mMustCharge = true;
                 if (response.isSuccessful()) {
                     PokemonResponse pokemonResponse = response.body();
                     mPokemonList = pokemonResponse.getResults();
                     mPokemonService.renderPokemonList(mPokemonList);
                 } else {
-                    Toast.makeText(activity, "Se detectó un problema de conexión", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "Se detectó un problema de conexión", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onFailure(Call<PokemonResponse> call, Throwable t) {
                 // If error, call API again
-                PokemonListActivity.mMustCharge = true;
-                callPokemonApi(activity, offset, adapter);
+                mMustCharge = true;
+                callPokemonApi();
+            }
+        });
+    }
+
+    public void setScrollListener(RecyclerView recyclerView, final GridLayoutManager manager) {
+        recyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                if (dy > 0) {
+                    int visibleItemCount = manager.getChildCount();
+                    int totalItemCount = manager.getItemCount();
+                    int pastVisibleItems = manager.findFirstVisibleItemPosition();
+
+                    // Checks if must charge Pokemon and if the recyclerView has reached the bottom
+                    if (mMustCharge && visibleItemCount + pastVisibleItems >= totalItemCount) {
+                        mMustCharge = false;
+                        mOffset += 20;
+                        callPokemonApi();
+                    }
+                }
             }
         });
     }

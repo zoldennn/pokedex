@@ -48,18 +48,11 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         ButterKnife.bind(this);
 
         setupRecyclerView();
+        showLoadingDialog();
 
-        mMustCharge = true;
-        mOffset = 0;
-        // Create loading Dialog
-        mLoadingDialog = new LoadingDialog(this);
-        mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mLoadingDialog.setContentView(R.layout.dialog);
-        TextView loadingMsg = mLoadingDialog.findViewById(R.id.cargando);
-        loadingMsg.setTypeface(t2);
-        Objects.requireNonNull(mLoadingDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        mLoadingDialog.show();
-        mPokemonListFetcher.callPokemonApi(this, mOffset, mPokemonListAdapter);
+        mMustCharge = true; // This var avoids to make api calls continuously
+        mOffset = 0; // To call pokemon from 0 to 20
+        mPokemonListFetcher.callPokemonApi(); // Make API call
     }
 
     @Override
@@ -70,11 +63,11 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
 
     @Override
     public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
-        Intent intent = new Intent(PokemonListActivity.this, EstadoPokemon.class);
-        intent.putExtra(Utils.EXTRA_POKEMON_NAME, pokemon.getName());
-        intent.putExtra(Utils.EXTRA_POKEMON_ID, pos);
+        Intent intent = new Intent(PokemonListActivity.this, EstadoPokemon.class)
+                .putExtra(Utils.EXTRA_POKEMON_NAME, pokemon.getName())
+                .putExtra(Utils.EXTRA_POKEMON_ID, pos);
 
-        if (img.getDrawable() != null)  // Check if the image loaded successfully
+        if (img.getDrawable() != null)  // Check if the image loaded successfully to be passed on intent
         {
             Bitmap bitmap = ((BitmapDrawable) img.getDrawable()).getBitmap();
             intent.putExtra(Utils.EXTRA_POKEMON_IMAGE, bitmap);
@@ -84,34 +77,27 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         }
     }
 
+    // Setup the RecyclerView, GridLayoutManager and Adapter
     private void setupRecyclerView() {
-        mPokemonListFetcher = new PokemonListFetcher(this);
-        mPokemonListAdapter = new PokemonListAdapter(this, this);
+        mPokemonListRecyclerView.setHasFixedSize(true); // For better performance
+        mLayoutManager = new GridLayoutManager(this, 3); // Grid layout 3 items
+        mPokemonListRecyclerView.setLayoutManager(mLayoutManager); // Grid horizontal items per view
 
-        mPokemonListRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
+        mPokemonListFetcher = new PokemonListFetcher(this, mOffset, this); // Instantiate this class to make the calls
+        mPokemonListAdapter = new PokemonListAdapter(this, this); // Adapter that will populate the data
 
-                if (dy > 0) {
-                    int visibleItemCount = mLayoutManager.getChildCount();
-                    int totalItemCount = mLayoutManager.getItemCount();
-                    int pastVisibleItems = mLayoutManager.findFirstVisibleItemPosition();
-
-                    // Checks if must charge Pokemon and if the recyclerView has reached the bottom
-                    if (mMustCharge && visibleItemCount + pastVisibleItems >= totalItemCount) {
-                        mMustCharge = false;
-                        mOffset += 20;
-                        mPokemonListFetcher.callPokemonApi(PokemonListActivity.this, mOffset, mPokemonListAdapter);
-
-                    }
-                }
-            }
-        });
-        // Apply recyclerView specs
-        mPokemonListRecyclerView.setHasFixedSize(true);
-        mLayoutManager = new GridLayoutManager(this, 3);
-        mPokemonListRecyclerView.setLayoutManager(mLayoutManager);
+        mPokemonListFetcher.setScrollListener(mPokemonListRecyclerView, mLayoutManager);
         mPokemonListRecyclerView.setAdapter(mPokemonListAdapter);
+    }
+
+    // Create loading Dialog
+    private void showLoadingDialog() {
+        mLoadingDialog = new LoadingDialog(this);
+        mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mLoadingDialog.setContentView(R.layout.dialog);
+        TextView loadingMsg = mLoadingDialog.findViewById(R.id.cargando); // Need this TextView to set TypeFace
+        loadingMsg.setTypeface(t2);
+        Objects.requireNonNull(mLoadingDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mLoadingDialog.show();
     }
 }
