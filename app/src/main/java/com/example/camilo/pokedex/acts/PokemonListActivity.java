@@ -77,6 +77,11 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         }
     }
 
+    @Override
+    public void renderPokemon(Pokemon pokemon) {
+        // Do nothing here
+    }
+
     // Setup the RecyclerView, GridLayoutManager and Adapter
     private void setupRecyclerView() {
         mPokemonListRecyclerView.setHasFixedSize(true); // For better performance

@@ -10,4 +10,6 @@ public interface PokemonService {
     void renderPokemonList(List<Pokemon> pokemonList);
 
     void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img);
+
+    void renderPokemon(Pokemon pokemon);
 }

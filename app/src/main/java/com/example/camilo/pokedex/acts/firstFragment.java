@@ -20,8 +20,12 @@ import com.example.camilo.pokedex.deserializers.Deserializer;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.services.ApiCallService;
+import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonDetailsFetcher;
 import com.google.gson.GsonBuilder;
+
+import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -33,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.camilo.pokedex.acts.EstadoPokemon.t2;
 
-public class firstFragment extends Fragment {
+public class firstFragment extends Fragment implements PokemonService {
 
     @BindView(R.id.tv_pokemon_details_id)
     TextView vPokemonID;
@@ -106,7 +110,7 @@ public class firstFragment extends Fragment {
         vClickedPokemonPhoto = EstadoPokemon.bitmap;
         mPokemonDetailsFetcher = new PokemonDetailsFetcher();
 
-        //CAMBIAR ENTRE NUMEROS Y LETRAS
+        // Change between numbers and letters
         vInvertDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -132,7 +136,7 @@ public class firstFragment extends Fragment {
 
         applyFonts();
 
-        //REVISAR SI YA SE VIO ESE POKEMON PARA AHORRAR DATOS
+        // Check if the user already see that pokemon
         if (vCurrentPokemonID == vClickedPokemonID) {
             vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(vClickedPokemonID));
 
@@ -158,8 +162,8 @@ public class firstFragment extends Fragment {
         return view;
     }
 
+    // Apply custom font to texts
     private void applyFonts() {
-        //APLICAR FUENTE A LOS TEXTS
         vPokemonName.setTypeface(t2);
         vPokemonID.setTypeface(t2);
         vTitleHP.setTypeface(t2);
@@ -182,83 +186,64 @@ public class firstFragment extends Fragment {
     private void begin() {
         vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(vClickedPokemonID));
 
-        //MOSTRAR NOMBRE E IMAGEN
+        // Show name and image while loading the rest of data
         vPokemonName.setText(vClickedPokemonName);
         vPokemonPhoto.setImageBitmap(vClickedPokemonPhoto);
 
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Pokemon.class, new Deserializer());
+        showLoadingDialog();
 
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://pokeapi.co/api/v2/")
-                .addConverterFactory(GsonConverterFactory.create(builder.create()))
-                .build();
+        mPokemonDetailsFetcher.callPokemon(vClickedPokemonID, this);
+    }
 
-        ApiCallService apiCallService = retrofit.create(ApiCallService.class);
+    @Override
+    public void renderPokemonList(List<Pokemon> pokemonList) {
+        // Do nothing here
+    }
 
-        //CREAR Y MOSTRAR DIÁLOGO DE CARGA
+    @Override
+    public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
+        // Do nothing here
+    }
+
+    @Override
+    public void renderPokemon(Pokemon pokemon) {
+        mType1 = pokemon.getType();
+        vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
+
+        mPokemonHP = pokemon.getHp();
+        mPokemonATK = pokemon.getAtk();
+        mPokemonDEF = pokemon.getDef();
+        mPokemonSPD = pokemon.getSpd();
+        mPokemonSATK = pokemon.getSatk();
+        mPokemonSDEF = pokemon.getSdf();
+
+        setBarsValues();
+
+        // Check if Pokemon has 2nd type
+        mType2 = pokemon.getType2();
+        if (mPokemonDetailsFetcher.checkPokemonType(mType2)==0) {
+            vPokemonImageType2.setVisibility(View.INVISIBLE);
+
+            // Move type 1 to center
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
+            lp.setMargins(70, 0, 0, 0);
+            vPokemonImageType1.setLayoutParams(lp);
+
+        } else {
+            vPokemonImageType2.setVisibility(View.VISIBLE);
+            vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
+        }
+        mLoadingDialog.dismiss();
+    }
+
+    // Show loading dialog while charging
+    private void showLoadingDialog(){
         mLoadingDialog = new LoadingDialog(getActivity());
         mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mLoadingDialog.setContentView(R.layout.dialog);
-        TextView cargando = mLoadingDialog.findViewById(R.id.cargando);
-        cargando.setTypeface(t2);
-        mLoadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        mLoadingDialog.setCancelable(false);
+        TextView loadingMsg = mLoadingDialog.findViewById(R.id.cargando); // Need this TextView to set TypeFace
+        loadingMsg.setTypeface(t2);
+        Objects.requireNonNull(mLoadingDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         mLoadingDialog.show();
-
-        //LLAMADA A LA API
-        Call<Pokemon> pokemonCall = apiCallService.getPokemon(vClickedPokemonID);
-        pokemonCall.enqueue(new Callback<Pokemon>() {
-            @Override
-            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
-                if (response.isSuccessful()) {
-                    Pokemon pokemon = response.body();
-                    mType1 = pokemon.getType();
-                    vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
-
-                    mPokemonHP = pokemon.getHp();
-                    vBarHP.setProgress(mPokemonHP);
-
-                    mPokemonATK = pokemon.getAtk();
-                    vBarATK.setProgress(mPokemonATK);
-
-                    mPokemonDEF = pokemon.getDef();
-                    vBarDEF.setProgress(mPokemonDEF);
-
-                    mPokemonSPD = pokemon.getSpd();
-                    vBarSPD.setProgress(mPokemonSPD);
-
-                    mPokemonSATK = pokemon.getSatk();
-                    vBarSATK.setProgress(mPokemonSATK);
-
-                    mPokemonSDEF = pokemon.getSdf();
-                    vBarSDEF.setProgress(mPokemonSDEF);
-
-                    //REVISAR SI EL POKEMON TIENE 2DO TIPO
-                    mType2 = pokemon.getType2();
-                    if ("null".equals(mType2)) {
-                        vPokemonImageType2.setVisibility(View.INVISIBLE);
-
-                        //MOVER EL TIPO PRINCIPAL A LA DERECHA
-                        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                        lp.setMargins(70, 0, 0, 0);
-                        vPokemonImageType1.setLayoutParams(lp);
-
-                    } else {
-                        vPokemonImageType2.setVisibility(View.VISIBLE);
-                        vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
-                    }
-
-                }
-                //TERMINÓ LA CARGA, CERRAR DIALOG
-                mLoadingDialog.dismiss();
-            }
-
-            @Override
-            public void onFailure(Call<Pokemon> call, Throwable t) {
-                mLoadingDialog.dismiss();
-                begin();
-            }
-        });
     }
 }

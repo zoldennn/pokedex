@@ -1,11 +1,50 @@
 package com.example.camilo.pokedex.utils;
 
+import android.view.View;
+import android.widget.LinearLayout;
+
 import com.example.camilo.pokedex.R;
+import com.example.camilo.pokedex.deserializers.Deserializer;
+import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.services.ApiCallService;
+import com.example.camilo.pokedex.services.PokemonService;
+import com.google.gson.GsonBuilder;
+
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PokemonDetailsFetcher {
 
-    public void callPokemon(){
+    public void callPokemon(final int pokemonID, final PokemonService service){
+        GsonBuilder builder = new GsonBuilder();
+        builder.registerTypeAdapter(Pokemon.class, new Deserializer());
 
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("https://pokeapi.co/api/v2/")
+                .addConverterFactory(GsonConverterFactory.create(builder.create()))
+                .build();
+
+        ApiCallService apiCallService = retrofit.create(ApiCallService.class);
+
+        // Api call
+        Call<Pokemon> pokemonCall = apiCallService.getPokemon(pokemonID);
+        pokemonCall.enqueue(new Callback<Pokemon>() {
+            @Override
+            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
+                if (response.isSuccessful()) {
+                    Pokemon pokemon = response.body();
+                    service.renderPokemon(pokemon);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Pokemon> call, Throwable t) {
+                callPokemon(pokemonID, service);
+            }
+        });
     }
 
     public String getViewedPokemonID(int clickedPokemonID) {
