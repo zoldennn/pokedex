@@ -14,11 +14,12 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.example.camilo.pokedex.R;
-import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.deserializers.Deserializer;
-import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
+import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.utils.PokemonDetailsFetcher;
 import com.google.gson.GsonBuilder;
 
@@ -32,27 +33,44 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.camilo.pokedex.acts.EstadoPokemon.t2;
 
+public class firstFragment extends Fragment {
 
-public class firstFragment extends Fragment{
-
-    @BindView(R.id.tv_pokemon_details_id) TextView vPokemonID;
-    @BindView(R.id.tv_pokemon_details_name) TextView vPokemonName;
-    @BindView(R.id.tv_pokemon_details_type1) ImageView vPokemonType1;
-    @BindView(R.id.tv_pokemon_details_type2) ImageView vPokemonType2;
-    @BindView(R.id.img_pokemon_details_photo) ImageView vPokemonPhoto;
-    @BindView(R.id.tv_pokemon_details_hp_title) TextView vTitleHP;
-    @BindView(R.id.tv_pokemon_details_atk_title) TextView vTitleATK;
-    @BindView(R.id.tv_pokemon_details_def_title) TextView vTitleDEF;
-    @BindView(R.id.tv_pokemon_details_spd_title) TextView vTitleSPD;
-    @BindView(R.id.tv_pokemon_details_sd_title) TextView vTitleSDEF;
-    @BindView(R.id.tv_pokemon_details_sa_title) TextView vTitleSATK;
-    @BindView(R.id.pb_pokemon_details_hp) ProgressBar vBarHP;
-    @BindView(R.id.pb_pokemon_details_atk) ProgressBar vBarATK;
-    @BindView(R.id.pb_pokemon_details_def) ProgressBar vBarDEF;
-    @BindView(R.id.pb_pokemon_details_sa) ProgressBar vBarSATK;
-    @BindView(R.id.pb_pokemon_details_sd) ProgressBar vBarSDEF;
-    @BindView(R.id.pb_pokemon_details_spd) ProgressBar vBarSPD;
-    @BindView(R.id.mas) ImageButton vInvertDataButton;
+    @BindView(R.id.tv_pokemon_details_id)
+    TextView vPokemonID;
+    @BindView(R.id.tv_pokemon_details_name)
+    TextView vPokemonName;
+    @BindView(R.id.tv_pokemon_details_type1)
+    ImageView vPokemonImageType1;
+    @BindView(R.id.tv_pokemon_details_type2)
+    ImageView vPokemonImageType2;
+    @BindView(R.id.img_pokemon_details_photo)
+    ImageView vPokemonPhoto;
+    @BindView(R.id.tv_pokemon_details_hp_title)
+    TextView vTitleHP;
+    @BindView(R.id.tv_pokemon_details_atk_title)
+    TextView vTitleATK;
+    @BindView(R.id.tv_pokemon_details_def_title)
+    TextView vTitleDEF;
+    @BindView(R.id.tv_pokemon_details_spd_title)
+    TextView vTitleSPD;
+    @BindView(R.id.tv_pokemon_details_sd_title)
+    TextView vTitleSDEF;
+    @BindView(R.id.tv_pokemon_details_sa_title)
+    TextView vTitleSATK;
+    @BindView(R.id.pb_pokemon_details_hp)
+    ProgressBar vBarHP;
+    @BindView(R.id.pb_pokemon_details_atk)
+    ProgressBar vBarATK;
+    @BindView(R.id.pb_pokemon_details_def)
+    ProgressBar vBarDEF;
+    @BindView(R.id.pb_pokemon_details_sa)
+    ProgressBar vBarSATK;
+    @BindView(R.id.pb_pokemon_details_sd)
+    ProgressBar vBarSDEF;
+    @BindView(R.id.pb_pokemon_details_spd)
+    ProgressBar vBarSPD;
+    @BindView(R.id.mas)
+    ImageButton vInvertDataButton;
 
     private int vCurrentPokemonID;
     private int vClickedPokemonID;
@@ -92,16 +110,15 @@ public class firstFragment extends Fragment{
         vInvertDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(mShowNumbers ==1) {
-                    vTitleHP.setText(""+ mPokemonHP);
-                    vTitleATK.setText(""+ mPokemonATK);
-                    vTitleDEF.setText(""+ mPokemonDEF);
-                    vTitleSPD.setText(""+ mPokemonSATK);
-                    vTitleSDEF.setText(""+ mPokemonSDEF);
-                    vTitleSATK.setText(""+ mPokemonSPD);
+                if (mShowNumbers == 1) {
+                    vTitleHP.setText("" + mPokemonHP);
+                    vTitleATK.setText("" + mPokemonATK);
+                    vTitleDEF.setText("" + mPokemonDEF);
+                    vTitleSPD.setText("" + mPokemonSATK);
+                    vTitleSDEF.setText("" + mPokemonSDEF);
+                    vTitleSATK.setText("" + mPokemonSPD);
                     mShowNumbers = 0;
-                }
-                else {
+                } else {
                     vTitleHP.setText("HP");
                     vTitleATK.setText("ATK");
                     vTitleDEF.setText("DEF");
@@ -110,51 +127,38 @@ public class firstFragment extends Fragment{
                     vTitleSATK.setText("SA");
                     mShowNumbers = 1;
                 }
-
             }
         });
 
         applyFonts();
 
         //REVISAR SI YA SE VIO ESE POKEMON PARA AHORRAR DATOS
-        if(vCurrentPokemonID == vClickedPokemonID) {
+        if (vCurrentPokemonID == vClickedPokemonID) {
+            vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(vClickedPokemonID));
 
-            if(vClickedPokemonID <10) {
-                vPokemonID.setText("#00"+ vClickedPokemonID);
-            }
-            else {
-                if(vClickedPokemonID <100) {
-                    vPokemonID.setText("#0"+ vClickedPokemonID);
-                }
-                else {
-                    vPokemonID.setText("#"+ vClickedPokemonID);
-                }
-            }
-            vPokemonType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
-            vPokemonType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
+            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
 
-            //mPokemonDetailsFetcher.checkPokemonType(mType1, vPokemonType1);
-            //mPokemonDetailsFetcher.checkPokemonType(mType2, vPokemonType2);
-            //revisarTIPO(mType1, vPokemonType1);
-            //revisarTIPO(mType2, vPokemonType2);
             vPokemonName.setText(vClickedPokemonName);
             vPokemonPhoto.setImageBitmap(vClickedPokemonPhoto);
 
             setBarsValues();
 
-            if(mType2.equals("null")) {
+            if (mPokemonDetailsFetcher.checkPokemonType(mType2) == 0) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(100, 0, 0, 0);
-                vPokemonType1.setLayoutParams(lp);
+                vPokemonImageType1.setLayoutParams(lp);
             }
-        }
-        else {
+            else
+            {
+                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
+            }
+        } else {
             begin();
         }
         return view;
     }
 
-    private void applyFonts(){
+    private void applyFonts() {
         //APLICAR FUENTE A LOS TEXTS
         vPokemonName.setTypeface(t2);
         vPokemonID.setTypeface(t2);
@@ -166,7 +170,7 @@ public class firstFragment extends Fragment{
         vTitleSATK.setTypeface(t2);
     }
 
-    private void setBarsValues(){
+    private void setBarsValues() {
         vBarHP.setProgress(mPokemonHP);
         vBarATK.setProgress(mPokemonATK);
         vBarDEF.setProgress(mPokemonDEF);
@@ -176,7 +180,7 @@ public class firstFragment extends Fragment{
     }
 
     private void begin() {
-        revisarID();
+        vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(vClickedPokemonID));
 
         //MOSTRAR NOMBRE E IMAGEN
         vPokemonName.setText(vClickedPokemonName);
@@ -207,13 +211,10 @@ public class firstFragment extends Fragment{
         pokemonCall.enqueue(new Callback<Pokemon>() {
             @Override
             public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
-                if(response.isSuccessful())
-                {
+                if (response.isSuccessful()) {
                     Pokemon pokemon = response.body();
                     mType1 = pokemon.getType();
-                    //mPokemonDetailsFetcher.checkPokemonType(mType1, vPokemonType1);
-                    //revisarTIPO(mType1, vPokemonType1);
-                    vPokemonType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
+                    vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
 
                     mPokemonHP = pokemon.getHp();
                     vBarHP.setProgress(mPokemonHP);
@@ -236,19 +237,16 @@ public class firstFragment extends Fragment{
                     //REVISAR SI EL POKEMON TIENE 2DO TIPO
                     mType2 = pokemon.getType2();
                     if ("null".equals(mType2)) {
-                        vPokemonType2.setVisibility(View.INVISIBLE);
+                        vPokemonImageType2.setVisibility(View.INVISIBLE);
 
                         //MOVER EL TIPO PRINCIPAL A LA DERECHA
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lp.setMargins(70, 0, 0, 0);
-                        vPokemonType1.setLayoutParams(lp);
+                        vPokemonImageType1.setLayoutParams(lp);
 
-                    }
-                    else {
-                        vPokemonType2.setVisibility(View.VISIBLE);
-                        vPokemonType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
-                        //mPokemonDetailsFetcher.checkPokemonType(mType2, vPokemonType2);
-                        //revisarTIPO(mType2, vPokemonType2);
+                    } else {
+                        vPokemonImageType2.setVisibility(View.VISIBLE);
+                        vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
                     }
 
                 }
@@ -263,85 +261,4 @@ public class firstFragment extends Fragment{
             }
         });
     }
-
-    //FUNCIÓN QUE CONCATENA BASADO EN EL NÚMERO DE POKEMON
-    private void revisarID() {
-        if(vClickedPokemonID <10)
-        {
-            vPokemonID.setText("#00"+ vClickedPokemonID);
-        }
-        else
-        {
-            if(vClickedPokemonID <100)
-            {
-                vPokemonID.setText("#0"+ vClickedPokemonID);
-            }
-            else
-            {
-                vPokemonID.setText("#"+ vClickedPokemonID);
-            }
-        }
-    }
-
-    //FUNCIÓN QUE REVISA LOS TIPOS DEL POKEMON
-    private void revisarTIPO(String tipo, ImageView imgV) {
-        switch (tipo){
-            case "bug":
-                imgV.setImageResource(R.drawable.bug);
-                break;
-            case "dark":
-                imgV.setImageResource(R.drawable.dark);
-                break;
-            case "dragon":
-                imgV.setImageResource(R.drawable.dragon);
-                break;
-            case "electric":
-                imgV.setImageResource(R.drawable.electric);
-                break;
-            case "fairy":
-                imgV.setImageResource(R.drawable.fairy);
-                break;
-            case "fighting":
-                imgV.setImageResource(R.drawable.fighting);
-                break;
-            case "fire":
-                imgV.setImageResource(R.drawable.fire);
-                break;
-            case "ghost":
-                imgV.setImageResource(R.drawable.ghost);
-                break;
-            case "grass":
-                imgV.setImageResource(R.drawable.grass);
-                break;
-            case "ground":
-                imgV.setImageResource(R.drawable.ground);
-                break;
-            case "ice":
-                imgV.setImageResource(R.drawable.ice);
-                break;
-            case "normal":
-                imgV.setImageResource(R.drawable.normal);
-                break;
-            case "poison":
-                imgV.setImageResource(R.drawable.poison);
-                break;
-            case "psychic":
-                imgV.setImageResource(R.drawable.psychic);
-                break;
-            case "steel":
-                imgV.setImageResource(R.drawable.steel);
-                break;
-            case "water":
-                imgV.setImageResource(R.drawable.water);
-                break;
-            case "rock":
-                imgV.setImageResource(R.drawable.rock);
-                break;
-            case "flying":
-                imgV.setImageResource(R.drawable.flying);
-                break;
-        }
-    }
-
-
 }

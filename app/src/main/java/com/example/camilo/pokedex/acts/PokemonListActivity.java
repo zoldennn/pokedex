@@ -65,7 +65,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
     public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
         Intent intent = new Intent(PokemonListActivity.this, EstadoPokemon.class)
                 .putExtra(Utils.EXTRA_POKEMON_NAME, pokemon.getName())
-                .putExtra(Utils.EXTRA_POKEMON_ID, pos);
+                .putExtra(Utils.EXTRA_POKEMON_ID, pos+1);
 
         if (img.getDrawable() != null)  // Check if the image loaded successfully to be passed on intent
         {

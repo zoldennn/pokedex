@@ -4,9 +4,24 @@ import com.example.camilo.pokedex.R;
 
 public class PokemonDetailsFetcher {
 
+    public void callPokemon(){
+
+    }
+
+    public String getViewedPokemonID(int clickedPokemonID) {
+        if (clickedPokemonID < 10) {
+            return "#00" + clickedPokemonID;
+        } else {
+            if (clickedPokemonID < 100) {
+                return "#0" + clickedPokemonID;
+            } else {
+                return "#" + clickedPokemonID;
+            }
+        }
+    }
 
     public int checkPokemonType(String typeToCheck) {
-        int drawableID = R.drawable.bug;
+        int drawableID;
         switch (typeToCheck) {
             case "bug":
                 drawableID = R.drawable.bug;
