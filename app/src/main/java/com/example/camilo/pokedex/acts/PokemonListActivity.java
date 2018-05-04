@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
     private GridLayoutManager mLayoutManager;
     private PokemonListFetcher mPokemonListFetcher;
     private LoadingDialog mLoadingDialog;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,11 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setIcon(R.drawable.pokelogo1);
         setupRecyclerView();
+
         showLoadingDialog();
 
         mMustCharge = true; // This var avoids to make api calls continuously
@@ -58,7 +64,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
     @Override
     public void renderPokemonList(List<Pokemon> pokemonList) {
         mPokemonListAdapter.addNewPokemonList(pokemonList);
-        mLoadingDialog.dismiss();
+        //mLoadingDialog.dismiss();
     }
 
     @Override

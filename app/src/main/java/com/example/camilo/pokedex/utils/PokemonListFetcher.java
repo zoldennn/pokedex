@@ -1,8 +1,11 @@
 package com.example.camilo.pokedex.utils;
 
 import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.widget.Toast;
 
 import com.example.camilo.pokedex.models.Pokemon;
@@ -42,7 +45,7 @@ public class PokemonListFetcher {
                 .build();
         // Get 20 pokemon list to adapter
         ApiCallService apiCallService = retrofit.create(ApiCallService.class);
-        Call<PokemonResponse> pokemonResponseCall = apiCallService.obtenerListaPokemon(20, mOffset);
+        Call<PokemonResponse> pokemonResponseCall = apiCallService.getPokemonList(20, mOffset);
 
         pokemonResponseCall.enqueue(new Callback<PokemonResponse>() {
             @Override
@@ -61,7 +64,7 @@ public class PokemonListFetcher {
             public void onFailure(Call<PokemonResponse> call, Throwable t) {
                 // If error, call API again
                 mMustCharge = true;
-                callPokemonApi();
+                showAlert();
             }
         });
     }
@@ -86,5 +89,30 @@ public class PokemonListFetcher {
                 }
             }
         });
+    }
+
+    private void showAlert(){
+        AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
+        builder1.setMessage("Write your message here.");
+        builder1.setCancelable(true);
+
+        builder1.setPositiveButton(
+                "No",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        dialog.cancel();
+                    }
+                });
+
+        builder1.setNegativeButton(
+                "Yes",
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        callPokemonApi();
+                    }
+                });
+
+        AlertDialog alert11 = builder1.create();
+        alert11.show();
     }
 }
