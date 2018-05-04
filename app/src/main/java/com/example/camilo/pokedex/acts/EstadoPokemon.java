@@ -5,6 +5,8 @@ import android.graphics.Bitmap;
 import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -40,7 +42,14 @@ public class EstadoPokemon extends AppCompatActivity  {
 
         BottomNavigationView bottomNavigationView;
 
-        getSupportFragmentManager().beginTransaction().add(R.id.layoutEstado, new FirstFragment()).commit();
+        //getSupportFragmentManager().beginTransaction().add(R.id.layoutEstado, new FirstFragment()).commit();
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        FirstFragment fragment = FirstFragment.newInstance(id, nameP, bitmap);
+        fragmentTransaction.add(R.id.layoutEstado, fragment);
+        fragmentTransaction.commit();
 
         //LISTENER BOTONES DEL NAVIGATION
         bottomNavigationView = findViewById(R.id.bottom_nav);
@@ -50,7 +59,14 @@ public class EstadoPokemon extends AppCompatActivity  {
                 switch (item.getItemId())
                 {
                     case R.id.action_add:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new FirstFragment()).commit();
+                        FragmentManager fragmentManager = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                        FirstFragment fragment = FirstFragment.newInstance(id, nameP, bitmap);
+                        fragmentTransaction.add(R.id.layoutEstado, fragment);
+                        fragmentTransaction.commit();
+
+                        //getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new FirstFragment()).commit();
                         return true;
                     case R.id.action_edit:
                         getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new secondFragment()).commit();

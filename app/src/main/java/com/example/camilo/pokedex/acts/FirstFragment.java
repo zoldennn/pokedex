@@ -17,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
 import com.example.camilo.pokedex.models.Pokemon;
@@ -86,7 +87,7 @@ public class FirstFragment extends Fragment implements PokemonService {
     private String mType2;
 
     private LoadingDialog mLoadingDialog;
-    private Bitmap vClickedPokemonPhoto;
+    private Bitmap mClickedPokemonPhoto;
     private PokemonDetailsFetcher mPokemonDetailsFetcher;
 
     public static FirstFragment newInstance(int id, String name, Bitmap bitmap) {
@@ -101,8 +102,21 @@ public class FirstFragment extends Fragment implements PokemonService {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-
+        mClickedPokemonID = getArguments().getInt(Utils.EXTRA_POKEMON_ID);
+        if (Utils.EXTRA_POKEMON_OLD_ID == mClickedPokemonID) {
+            mCurrentPokemonID = mClickedPokemonID;
+        } else {
+            Utils.EXTRA_POKEMON_OLD_ID = mClickedPokemonID;
+        }
+        mClickedPokemonPhoto = getArguments().getParcelable(Utils.EXTRA_POKEMON_IMAGE);
+        vClickedPokemonName = getArguments().getString(Utils.EXTRA_POKEMON_NAME);
         super.onCreate(savedInstanceState);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        Utils.EXTRA_POKEMON_OLD_ID = mClickedPokemonID;
     }
 
     @Override
@@ -112,10 +126,6 @@ public class FirstFragment extends Fragment implements PokemonService {
         View view = inflater.inflate(R.layout.pokemon_details_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        mCurrentPokemonID = mClickedPokemonID;
-        mClickedPokemonID = EstadoPokemon.id;
-        vClickedPokemonName = EstadoPokemon.nameP;
-        vClickedPokemonPhoto = EstadoPokemon.bitmap;
         mPokemonDetailsFetcher = new PokemonDetailsFetcher();
 
         init();
@@ -123,7 +133,7 @@ public class FirstFragment extends Fragment implements PokemonService {
         return view;
     }
 
-    private void init(){
+    private void init() {
         // Change between numbers and letters
         vInvertDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -153,21 +163,22 @@ public class FirstFragment extends Fragment implements PokemonService {
 
         // Check if the user already see that pokemon
         if (mCurrentPokemonID == mClickedPokemonID) {
+            Pokemon pokemon = MyApplication.getLastPokemon();
             vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(getContext(), mClickedPokemonID));
 
-            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(mType1));
+            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType()));
 
             vPokemonName.setText(vClickedPokemonName);
-            vPokemonPhoto.setImageBitmap(vClickedPokemonPhoto);
+            vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
 
             setBarsValues();
 
-            if (mPokemonDetailsFetcher.checkPokemonTypes(mType2) == 0) {
+            if (mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()) == 0) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(100, 0, 0, 0);
                 vPokemonImageType1.setLayoutParams(lp);
             } else {
-                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(mType2));
+                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()));
             }
         } else {
             begin();
@@ -200,7 +211,7 @@ public class FirstFragment extends Fragment implements PokemonService {
 
         // Show name and image while loading the rest of data
         vPokemonName.setText(vClickedPokemonName);
-        vPokemonPhoto.setImageBitmap(vClickedPokemonPhoto);
+        vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
 
         showLoadingDialog();
 

@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 
+import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.deserializers.Deserializer;
 import com.example.camilo.pokedex.models.Pokemon;
@@ -37,6 +38,7 @@ public class PokemonDetailsFetcher {
             public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
                 if (response.isSuccessful()) {
                     Pokemon pokemon = response.body();
+                    MyApplication.setLastPokemon(pokemon);
                     service.renderPokemon(pokemon);
                 }
             }
