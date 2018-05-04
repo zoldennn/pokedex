@@ -34,8 +34,6 @@ import static com.example.camilo.pokedex.acts.EstadoPokemon.t2;
 
 public class firstFragment extends Fragment{
 
-    private Retrofit retrofit;
-
     @BindView(R.id.tv_pokemon_details_id) TextView vPokemonID;
     @BindView(R.id.tv_pokemon_details_name) TextView vPokemonName;
     @BindView(R.id.tv_pokemon_details_type1) ImageView vPokemonType1;
@@ -47,11 +45,6 @@ public class firstFragment extends Fragment{
     @BindView(R.id.tv_pokemon_details_spd_title) TextView vTitleSPD;
     @BindView(R.id.tv_pokemon_details_sd_title) TextView vTitleSDEF;
     @BindView(R.id.tv_pokemon_details_sa_title) TextView vTitleSATK;
-    public static String namePoke, tipo1, tipo2;
-    public Bitmap bitmapp;
-    public static int idComp, id2, valorHP,valorATK, valorDEF, valorSATK, valorSDEF, valorSPD, control=1;
-    public LoadingDialog loadingDialog;
-
     @BindView(R.id.pb_pokemon_details_hp) ProgressBar vBarHP;
     @BindView(R.id.pb_pokemon_details_atk) ProgressBar vBarATK;
     @BindView(R.id.pb_pokemon_details_def) ProgressBar vBarDEF;
@@ -59,6 +52,24 @@ public class firstFragment extends Fragment{
     @BindView(R.id.pb_pokemon_details_sd) ProgressBar vBarSDEF;
     @BindView(R.id.pb_pokemon_details_spd) ProgressBar vBarSPD;
     @BindView(R.id.mas) ImageButton vInvertDataButton;
+
+    private String vClickedPokemonName;
+    private Bitmap vClickedPokemonPhoto;
+    private int vCurrentPokemonID;
+    private int vClickedPokemonID;
+    private int mPokemonHP;
+    private int mPokemonATK;
+    private int mPokemonDEF;
+    private int mPokemonSATK;
+    private int mPokemonSDEF;
+    private int mPokemonSPD;
+    private int mShowNumbers = 1;
+    
+    private String mType1;
+    private String mType2;
+    private LoadingDialog mLoadingDialog;
+
+
 
     public firstFragment() {
         // Required empty public constructor
@@ -71,24 +82,24 @@ public class firstFragment extends Fragment{
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.pokemon_details_fragment, container, false);
         ButterKnife.bind(this, view);
-        idComp = id2;
-        id2 = EstadoPokemon.id;
-        namePoke = EstadoPokemon.nameP;
-        bitmapp = EstadoPokemon.bitmap;
+        vCurrentPokemonID = vClickedPokemonID;
+        vClickedPokemonID = EstadoPokemon.id;
+        vClickedPokemonName = EstadoPokemon.nameP;
+        vClickedPokemonPhoto = EstadoPokemon.bitmap;
         //desc = view.findViewById(R.id.viewDESC);
 
         //CAMBIAR ENTRE NUMEROS Y LETRAS
         vInvertDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(control==1) {
-                    vTitleHP.setText(""+valorHP);
-                    vTitleATK.setText(""+valorATK);
-                    vTitleDEF.setText(""+valorDEF);
-                    vTitleSPD.setText(""+valorSATK);
-                    vTitleSDEF.setText(""+valorSDEF);
-                    vTitleSATK.setText(""+valorSPD);
-                    control = 0;
+                if(mShowNumbers ==1) {
+                    vTitleHP.setText(""+ mPokemonHP);
+                    vTitleATK.setText(""+ mPokemonATK);
+                    vTitleDEF.setText(""+ mPokemonDEF);
+                    vTitleSPD.setText(""+ mPokemonSATK);
+                    vTitleSDEF.setText(""+ mPokemonSDEF);
+                    vTitleSATK.setText(""+ mPokemonSPD);
+                    mShowNumbers = 0;
                 }
                 else {
                     vTitleHP.setText("HP");
@@ -97,7 +108,7 @@ public class firstFragment extends Fragment{
                     vTitleSPD.setText("SPD");
                     vTitleSDEF.setText("SD");
                     vTitleSATK.setText("SA");
-                    control = 1;
+                    mShowNumbers = 1;
                 }
 
             }
@@ -106,27 +117,27 @@ public class firstFragment extends Fragment{
         applyFonts();
 
         //REVISAR SI YA SE VIO ESE POKEMON PARA AHORRAR DATOS
-        if(idComp == id2) {
+        if(vCurrentPokemonID == vClickedPokemonID) {
 
-            if(id2<10) {
-                vPokemonID.setText("#00"+id2);
+            if(vClickedPokemonID <10) {
+                vPokemonID.setText("#00"+ vClickedPokemonID);
             }
             else {
-                if(id2<100) {
-                    vPokemonID.setText("#0"+id2);
+                if(vClickedPokemonID <100) {
+                    vPokemonID.setText("#0"+ vClickedPokemonID);
                 }
                 else {
-                    vPokemonID.setText("#"+id2);
+                    vPokemonID.setText("#"+ vClickedPokemonID);
                 }
             }
-            revisarTIPO(tipo1, vPokemonType1);
-            revisarTIPO(tipo2, vPokemonType2);
-            vPokemonName.setText(namePoke);
-            vPokemonPhoto.setImageBitmap(bitmapp);
+            revisarTIPO(mType1, vPokemonType1);
+            revisarTIPO(mType2, vPokemonType2);
+            vPokemonName.setText(vClickedPokemonName);
+            vPokemonPhoto.setImageBitmap(vClickedPokemonPhoto);
 
             setBarsValues();
 
-            if(tipo2.equals("null")) {
+            if(mType2.equals("null")) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(100, 0, 0, 0);
                 vPokemonType1.setLayoutParams(lp);
@@ -151,25 +162,25 @@ public class firstFragment extends Fragment{
     }
 
     private void setBarsValues(){
-        vBarHP.setProgress(valorHP);
-        vBarATK.setProgress(valorATK);
-        vBarDEF.setProgress(valorDEF);
-        vBarSPD.setProgress(valorSPD);
-        vBarSATK.setProgress(valorSATK);
-        vBarSDEF.setProgress(valorSDEF);
+        vBarHP.setProgress(mPokemonHP);
+        vBarATK.setProgress(mPokemonATK);
+        vBarDEF.setProgress(mPokemonDEF);
+        vBarSPD.setProgress(mPokemonSPD);
+        vBarSATK.setProgress(mPokemonSATK);
+        vBarSDEF.setProgress(mPokemonSDEF);
     }
 
     private void begin() {
         revisarID();
 
         //MOSTRAR NOMBRE E IMAGEN
-        vPokemonName.setText(namePoke);
-        vPokemonPhoto.setImageBitmap(bitmapp);
+        vPokemonName.setText(vClickedPokemonName);
+        vPokemonPhoto.setImageBitmap(vClickedPokemonPhoto);
 
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Pokemon.class, new Deserializer());
 
-        retrofit = new Retrofit.Builder()
+        Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")
                 .addConverterFactory(GsonConverterFactory.create(builder.create()))
                 .build();
@@ -177,43 +188,43 @@ public class firstFragment extends Fragment{
         ApiCallService apiCallService = retrofit.create(ApiCallService.class);
 
         //CREAR Y MOSTRAR DIÁLOGO DE CARGA
-        loadingDialog = new LoadingDialog(getActivity());
-        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        loadingDialog.setContentView(R.layout.dialog);
-        TextView cargando = loadingDialog.findViewById(R.id.cargando);
+        mLoadingDialog = new LoadingDialog(getActivity());
+        mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mLoadingDialog.setContentView(R.layout.dialog);
+        TextView cargando = mLoadingDialog.findViewById(R.id.cargando);
         cargando.setTypeface(t2);
-        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        loadingDialog.setCancelable(false);
-        loadingDialog.show();
+        mLoadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mLoadingDialog.setCancelable(false);
+        mLoadingDialog.show();
 
         //LLAMADA A LA API
-        Call<Pokemon> pokemonCall = apiCallService.getPokemon(id2);
+        Call<Pokemon> pokemonCall = apiCallService.getPokemon(vClickedPokemonID);
         pokemonCall.enqueue(new Callback<Pokemon>() {
             @Override
             public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
                 if(response.isSuccessful())
                 {
                     Pokemon pokemon = response.body();
-                    tipo1 = pokemon.getType();
-                    revisarTIPO(tipo1, vPokemonType1);
+                    mType1 = pokemon.getType();
+                    revisarTIPO(mType1, vPokemonType1);
 
-                    valorHP = pokemon.getHp();
-                    vBarHP.setProgress(valorHP);
+                    mPokemonHP = pokemon.getHp();
+                    vBarHP.setProgress(mPokemonHP);
 
-                    valorATK = pokemon.getAtk();
-                    vBarATK.setProgress(valorATK);
+                    mPokemonATK = pokemon.getAtk();
+                    vBarATK.setProgress(mPokemonATK);
 
-                    valorDEF = pokemon.getDef();
-                    vBarDEF.setProgress(valorDEF);
+                    mPokemonDEF = pokemon.getDef();
+                    vBarDEF.setProgress(mPokemonDEF);
 
-                    valorSPD = pokemon.getSpd();
-                    vBarSPD.setProgress(valorSPD);
+                    mPokemonSPD = pokemon.getSpd();
+                    vBarSPD.setProgress(mPokemonSPD);
 
-                    valorSATK = pokemon.getSatk();
-                    vBarSATK.setProgress(valorSATK);
+                    mPokemonSATK = pokemon.getSatk();
+                    vBarSATK.setProgress(mPokemonSATK);
 
-                    valorSDEF = pokemon.getSdf();
-                    vBarSDEF.setProgress(valorSDEF);
+                    mPokemonSDEF = pokemon.getSdf();
+                    vBarSDEF.setProgress(mPokemonSDEF);
 
 
                     //----------------------GUARDAR PARA HT Y WT DOUBLES--------------------
@@ -258,8 +269,8 @@ public class firstFragment extends Fragment{
                     */
 
                     //REVISAR SI EL POKEMON TIENE 2DO TIPO
-                    tipo2 = pokemon.getType2();
-                    if ("null".equals(tipo2)) {
+                    mType2 = pokemon.getType2();
+                    if ("null".equals(mType2)) {
                         vPokemonType2.setVisibility(View.INVISIBLE);
 
                         //MOVER EL TIPO PRINCIPAL A LA DERECHA
@@ -270,17 +281,17 @@ public class firstFragment extends Fragment{
                     }
                     else {
                         vPokemonType2.setVisibility(View.VISIBLE);
-                        revisarTIPO(tipo2, vPokemonType2);
+                        revisarTIPO(mType2, vPokemonType2);
                     }
 
                 }
                 //TERMINÓ LA CARGA, CERRAR DIALOG
-                loadingDialog.dismiss();
+                mLoadingDialog.dismiss();
             }
 
             @Override
             public void onFailure(Call<Pokemon> call, Throwable t) {
-                loadingDialog.dismiss();
+                mLoadingDialog.dismiss();
                 begin();
             }
         });
@@ -288,19 +299,19 @@ public class firstFragment extends Fragment{
 
     //FUNCIÓN QUE CONCATENA BASADO EN EL NÚMERO DE POKEMON
     private void revisarID() {
-        if(id2<10)
+        if(vClickedPokemonID <10)
         {
-            vPokemonID.setText("#00"+id2);
+            vPokemonID.setText("#00"+ vClickedPokemonID);
         }
         else
         {
-            if(id2<100)
+            if(vClickedPokemonID <100)
             {
-                vPokemonID.setText("#0"+id2);
+                vPokemonID.setText("#0"+ vClickedPokemonID);
             }
             else
             {
-                vPokemonID.setText("#"+id2);
+                vPokemonID.setText("#"+ vClickedPokemonID);
             }
         }
     }
