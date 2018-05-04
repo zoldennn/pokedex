@@ -19,6 +19,7 @@ import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.deserializers.Deserializer;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
+import com.example.camilo.pokedex.utils.PokemonDetailsFetcher;
 import com.google.gson.GsonBuilder;
 
 import butterknife.BindView;
@@ -53,8 +54,6 @@ public class firstFragment extends Fragment{
     @BindView(R.id.pb_pokemon_details_spd) ProgressBar vBarSPD;
     @BindView(R.id.mas) ImageButton vInvertDataButton;
 
-    private String vClickedPokemonName;
-    private Bitmap vClickedPokemonPhoto;
     private int vCurrentPokemonID;
     private int vClickedPokemonID;
     private int mPokemonHP;
@@ -64,17 +63,18 @@ public class firstFragment extends Fragment{
     private int mPokemonSDEF;
     private int mPokemonSPD;
     private int mShowNumbers = 1;
-    
+
+    private String vClickedPokemonName;
     private String mType1;
     private String mType2;
+
     private LoadingDialog mLoadingDialog;
-
-
+    private Bitmap vClickedPokemonPhoto;
+    private PokemonDetailsFetcher mPokemonDetailsFetcher;
 
     public firstFragment() {
         // Required empty public constructor
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
@@ -86,7 +86,7 @@ public class firstFragment extends Fragment{
         vClickedPokemonID = EstadoPokemon.id;
         vClickedPokemonName = EstadoPokemon.nameP;
         vClickedPokemonPhoto = EstadoPokemon.bitmap;
-        //desc = view.findViewById(R.id.viewDESC);
+        mPokemonDetailsFetcher = new PokemonDetailsFetcher();
 
         //CAMBIAR ENTRE NUMEROS Y LETRAS
         vInvertDataButton.setOnClickListener(new View.OnClickListener() {
@@ -130,8 +130,13 @@ public class firstFragment extends Fragment{
                     vPokemonID.setText("#"+ vClickedPokemonID);
                 }
             }
-            revisarTIPO(mType1, vPokemonType1);
-            revisarTIPO(mType2, vPokemonType2);
+            vPokemonType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
+            vPokemonType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
+
+            //mPokemonDetailsFetcher.checkPokemonType(mType1, vPokemonType1);
+            //mPokemonDetailsFetcher.checkPokemonType(mType2, vPokemonType2);
+            //revisarTIPO(mType1, vPokemonType1);
+            //revisarTIPO(mType2, vPokemonType2);
             vPokemonName.setText(vClickedPokemonName);
             vPokemonPhoto.setImageBitmap(vClickedPokemonPhoto);
 
@@ -206,7 +211,9 @@ public class firstFragment extends Fragment{
                 {
                     Pokemon pokemon = response.body();
                     mType1 = pokemon.getType();
-                    revisarTIPO(mType1, vPokemonType1);
+                    //mPokemonDetailsFetcher.checkPokemonType(mType1, vPokemonType1);
+                    //revisarTIPO(mType1, vPokemonType1);
+                    vPokemonType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
 
                     mPokemonHP = pokemon.getHp();
                     vBarHP.setProgress(mPokemonHP);
@@ -226,48 +233,6 @@ public class firstFragment extends Fragment{
                     mPokemonSDEF = pokemon.getSdf();
                     vBarSDEF.setProgress(mPokemonSDEF);
 
-
-                    //----------------------GUARDAR PARA HT Y WT DOUBLES--------------------
-
-                    /*String wt = Integer.toString(pokemon.getWid());
-                    if(wt.length()==4)
-                    {
-                        wt = wt.substring(0, 3) + "." + wt.substring(3, wt.length());
-                    }
-                    else
-                    {
-                        if(wt.length()==3)
-                        {
-                            wt = wt.substring(0, 2) + "." + wt.substring(2, wt.length());
-                        }
-                        else
-                        {
-                            if(wt.length()==2)
-                            {
-                                wt = wt.substring(0, 1) + "." + wt.substring(1, wt.length());
-                            }
-                        }
-                    }
-
-                    double redondearW = Double.parseDouble(wt);
-                    long wttt = Math.round(redondearW);*/
-
-
-                    /*String ht = Integer.toString(pokemon.getHei());
-                    if(ht.length()==2)
-                    {
-                        ht = ht.substring(0, 1) + "." + ht.substring(1, ht.length());
-                    }
-                    else
-                    {
-                        ht = "0."+ht;
-                    }
-                    double redondearH = Double.parseDouble(ht);
-                    long htt = Math.round(redondearH);
-
-                    ------------------------------------------------------------------------
-                    */
-
                     //REVISAR SI EL POKEMON TIENE 2DO TIPO
                     mType2 = pokemon.getType2();
                     if ("null".equals(mType2)) {
@@ -281,7 +246,9 @@ public class firstFragment extends Fragment{
                     }
                     else {
                         vPokemonType2.setVisibility(View.VISIBLE);
-                        revisarTIPO(mType2, vPokemonType2);
+                        vPokemonType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
+                        //mPokemonDetailsFetcher.checkPokemonType(mType2, vPokemonType2);
+                        //revisarTIPO(mType2, vPokemonType2);
                     }
 
                 }
