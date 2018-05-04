@@ -22,6 +22,7 @@ import com.example.camilo.pokedex.dialogs.LoadingDialog;
 import com.google.gson.GsonBuilder;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -35,14 +36,29 @@ public class firstFragment extends Fragment{
 
     private Retrofit retrofit;
 
-    private TextView cargando, idPoke,name,hp,atk,def,spd,sdf,satk;
-    public ImageView img,type,type2;
+    @BindView(R.id.tv_pokemon_details_id) TextView vPokemonID;
+    @BindView(R.id.tv_pokemon_details_name) TextView vPokemonName;
+    @BindView(R.id.tv_pokemon_details_type1) ImageView vPokemonType1;
+    @BindView(R.id.tv_pokemon_details_type2) ImageView vPokemonType2;
+    @BindView(R.id.img_pokemon_details_photo) ImageView vPokemonPhoto;
+    @BindView(R.id.tv_pokemon_details_hp_title) TextView vTitleHP;
+    @BindView(R.id.tv_pokemon_details_atk_title) TextView vTitleATK;
+    @BindView(R.id.tv_pokemon_details_def_title) TextView vTitleDEF;
+    @BindView(R.id.tv_pokemon_details_spd_title) TextView vTitleSPD;
+    @BindView(R.id.tv_pokemon_details_sd_title) TextView vTitleSDEF;
+    @BindView(R.id.tv_pokemon_details_sa_title) TextView vTitleSATK;
     public static String namePoke, tipo1, tipo2;
-    public ProgressBar barHP,barATK,barDEF,barSATK,barSDEF,barSPD;
     public Bitmap bitmapp;
     public static int idComp, id2, valorHP,valorATK, valorDEF, valorSATK, valorSDEF, valorSPD, control=1;
     public LoadingDialog loadingDialog;
-    public ImageButton mas;
+
+    @BindView(R.id.pb_pokemon_details_hp) ProgressBar vBarHP;
+    @BindView(R.id.pb_pokemon_details_atk) ProgressBar vBarATK;
+    @BindView(R.id.pb_pokemon_details_def) ProgressBar vBarDEF;
+    @BindView(R.id.pb_pokemon_details_sa) ProgressBar vBarSATK;
+    @BindView(R.id.pb_pokemon_details_sd) ProgressBar vBarSDEF;
+    @BindView(R.id.pb_pokemon_details_spd) ProgressBar vBarSPD;
+    @BindView(R.id.mas) ImageButton vInvertDataButton;
 
     public firstFragment() {
         // Required empty public constructor
@@ -54,98 +70,66 @@ public class firstFragment extends Fragment{
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.pokemon_details_fragment, container, false);
-
+        ButterKnife.bind(this, view);
         idComp = id2;
         id2 = EstadoPokemon.id;
         namePoke = EstadoPokemon.nameP;
         bitmapp = EstadoPokemon.bitmap;
-
-        idPoke = view.findViewById(R.id.tv_pokemon_details_id);
-        name = view.findViewById(R.id.tv_pokemon_details_name);
-        type = view.findViewById(R.id.tv_pokemon_details_type1);
-        type2 = view.findViewById(R.id.tv_pokemon_details_type2);
-        img = view.findViewById(R.id.img_pokemon_details_photo);
         //desc = view.findViewById(R.id.viewDESC);
 
-        hp = view.findViewById(R.id.tv_pokemon_details_hp_title);
-        atk = view.findViewById(R.id.tv_pokemon_details_atk_title);
-        def = view.findViewById(R.id.tv_pokemon_details_def_title);
-        satk = view.findViewById(R.id.tv_pokemon_details_spd_title);
-        sdf = view.findViewById(R.id.tv_pokemon_details_sd_title);
-        spd = view.findViewById(R.id.tv_pokemon_details_sa_title);
-
-        barHP = view.findViewById(R.id.pb_pokemon_details_hp);
-        barATK = view.findViewById(R.id.pb_pokemon_details_atk);
-        barDEF = view.findViewById(R.id.pb_pokemon_details_def);
-        barSATK = view.findViewById(R.id.pb_pokemon_details_sa);
-        barSDEF = view.findViewById(R.id.pb_pokemon_details_sd);
-        barSPD = view.findViewById(R.id.pb_pokemon_details_spd);
-        mas = view.findViewById(R.id.mas);
-
         //CAMBIAR ENTRE NUMEROS Y LETRAS
-        mas.setOnClickListener(new View.OnClickListener() {
+        vInvertDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(control==1) {
-                    hp.setText(""+valorHP);
-                    atk.setText(""+valorATK);
-                    def.setText(""+valorDEF);
-                    satk.setText(""+valorSATK);
-                    sdf.setText(""+valorSDEF);
-                    spd.setText(""+valorSPD);
+                    vTitleHP.setText(""+valorHP);
+                    vTitleATK.setText(""+valorATK);
+                    vTitleDEF.setText(""+valorDEF);
+                    vTitleSPD.setText(""+valorSATK);
+                    vTitleSDEF.setText(""+valorSDEF);
+                    vTitleSATK.setText(""+valorSPD);
                     control = 0;
                 }
                 else {
-                    hp.setText("HP");
-                    atk.setText("ATK");
-                    def.setText("DEF");
-                    satk.setText("SPD");
-                    sdf.setText("SD");
-                    spd.setText("SA");
+                    vTitleHP.setText("HP");
+                    vTitleATK.setText("ATK");
+                    vTitleDEF.setText("DEF");
+                    vTitleSPD.setText("SPD");
+                    vTitleSDEF.setText("SD");
+                    vTitleSATK.setText("SA");
                     control = 1;
                 }
 
             }
         });
 
-        //APLICAR FUENTE A LOS TEXTS
-        name.setTypeface(t2);
-        idPoke.setTypeface(t2);
-        hp.setTypeface(t2);
-        atk.setTypeface(t2);
-        def.setTypeface(t2);
-        satk.setTypeface(t2);
-        sdf.setTypeface(t2);
-        spd.setTypeface(t2);
+        applyFonts();
 
         //REVISAR SI YA SE VIO ESE POKEMON PARA AHORRAR DATOS
         if(idComp == id2) {
 
             if(id2<10) {
-                idPoke.setText("#00"+id2);
+                vPokemonID.setText("#00"+id2);
             }
             else {
                 if(id2<100) {
-                    idPoke.setText("#0"+id2);
+                    vPokemonID.setText("#0"+id2);
                 }
                 else {
-                    idPoke.setText("#"+id2);
+                    vPokemonID.setText("#"+id2);
                 }
             }
-            revisarTIPO(tipo1,type);
-            revisarTIPO(tipo2,type2);
-            name.setText(namePoke);
-            img.setImageBitmap(bitmapp);
-            barHP.setProgress(valorHP);
-            barATK.setProgress(valorATK);
-            barDEF.setProgress(valorDEF);
-            barSPD.setProgress(valorSPD);
-            barSATK.setProgress(valorSATK);
-            barSDEF.setProgress(valorSDEF);
+            revisarTIPO(tipo1, vPokemonType1);
+            revisarTIPO(tipo2, vPokemonType2);
+            vPokemonName.setText(namePoke);
+            vPokemonPhoto.setImageBitmap(bitmapp);
+
+            setBarsValues();
+
             if(tipo2.equals("null")) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(100, 0, 0, 0);
-                type.setLayoutParams(lp);
+                vPokemonType1.setLayoutParams(lp);
             }
         }
         else {
@@ -154,14 +138,33 @@ public class firstFragment extends Fragment{
         return view;
     }
 
+    private void applyFonts(){
+        //APLICAR FUENTE A LOS TEXTS
+        vPokemonName.setTypeface(t2);
+        vPokemonID.setTypeface(t2);
+        vTitleHP.setTypeface(t2);
+        vTitleATK.setTypeface(t2);
+        vTitleDEF.setTypeface(t2);
+        vTitleSPD.setTypeface(t2);
+        vTitleSDEF.setTypeface(t2);
+        vTitleSATK.setTypeface(t2);
+    }
+
+    private void setBarsValues(){
+        vBarHP.setProgress(valorHP);
+        vBarATK.setProgress(valorATK);
+        vBarDEF.setProgress(valorDEF);
+        vBarSPD.setProgress(valorSPD);
+        vBarSATK.setProgress(valorSATK);
+        vBarSDEF.setProgress(valorSDEF);
+    }
+
     private void begin() {
-
-
         revisarID();
 
         //MOSTRAR NOMBRE E IMAGEN
-        name.setText(namePoke);
-        img.setImageBitmap(bitmapp);
+        vPokemonName.setText(namePoke);
+        vPokemonPhoto.setImageBitmap(bitmapp);
 
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Pokemon.class, new Deserializer());
@@ -177,7 +180,7 @@ public class firstFragment extends Fragment{
         loadingDialog = new LoadingDialog(getActivity());
         loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         loadingDialog.setContentView(R.layout.dialog);
-        cargando = loadingDialog.findViewById(R.id.cargando);
+        TextView cargando = loadingDialog.findViewById(R.id.cargando);
         cargando.setTypeface(t2);
         loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         loadingDialog.setCancelable(false);
@@ -192,25 +195,25 @@ public class firstFragment extends Fragment{
                 {
                     Pokemon pokemon = response.body();
                     tipo1 = pokemon.getType();
-                    revisarTIPO(tipo1,type);
+                    revisarTIPO(tipo1, vPokemonType1);
 
                     valorHP = pokemon.getHp();
-                    barHP.setProgress(valorHP);
+                    vBarHP.setProgress(valorHP);
 
                     valorATK = pokemon.getAtk();
-                    barATK.setProgress(valorATK);
+                    vBarATK.setProgress(valorATK);
 
                     valorDEF = pokemon.getDef();
-                    barDEF.setProgress(valorDEF);
+                    vBarDEF.setProgress(valorDEF);
 
                     valorSPD = pokemon.getSpd();
-                    barSPD.setProgress(valorSPD);
+                    vBarSPD.setProgress(valorSPD);
 
                     valorSATK = pokemon.getSatk();
-                    barSATK.setProgress(valorSATK);
+                    vBarSATK.setProgress(valorSATK);
 
                     valorSDEF = pokemon.getSdf();
-                    barSDEF.setProgress(valorSDEF);
+                    vBarSDEF.setProgress(valorSDEF);
 
 
                     //----------------------GUARDAR PARA HT Y WT DOUBLES--------------------
@@ -254,22 +257,20 @@ public class firstFragment extends Fragment{
                     ------------------------------------------------------------------------
                     */
 
-
-
                     //REVISAR SI EL POKEMON TIENE 2DO TIPO
                     tipo2 = pokemon.getType2();
                     if ("null".equals(tipo2)) {
-                        type2.setVisibility(View.INVISIBLE);
+                        vPokemonType2.setVisibility(View.INVISIBLE);
 
                         //MOVER EL TIPO PRINCIPAL A LA DERECHA
                         LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         lp.setMargins(70, 0, 0, 0);
-                        type.setLayoutParams(lp);
+                        vPokemonType1.setLayoutParams(lp);
 
                     }
                     else {
-                        type2.setVisibility(View.VISIBLE);
-                        revisarTIPO(tipo2,type2);
+                        vPokemonType2.setVisibility(View.VISIBLE);
+                        revisarTIPO(tipo2, vPokemonType2);
                     }
 
                 }
@@ -281,7 +282,6 @@ public class firstFragment extends Fragment{
             public void onFailure(Call<Pokemon> call, Throwable t) {
                 loadingDialog.dismiss();
                 begin();
-                cargando.setText("Reintentando conexión..");
             }
         });
     }
@@ -290,17 +290,17 @@ public class firstFragment extends Fragment{
     private void revisarID() {
         if(id2<10)
         {
-            idPoke.setText("#00"+id2);
+            vPokemonID.setText("#00"+id2);
         }
         else
         {
             if(id2<100)
             {
-                idPoke.setText("#0"+id2);
+                vPokemonID.setText("#0"+id2);
             }
             else
             {
-                idPoke.setText("#"+id2);
+                vPokemonID.setText("#"+id2);
             }
         }
     }
