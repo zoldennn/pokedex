@@ -1,5 +1,6 @@
 package com.example.camilo.pokedex.utils;
 
+import android.content.Context;
 import android.view.View;
 import android.widget.LinearLayout;
 
@@ -47,19 +48,19 @@ public class PokemonDetailsFetcher {
         });
     }
 
-    public String getViewedPokemonID(int clickedPokemonID) {
+    public String getViewedPokemonID(Context context, int clickedPokemonID) {
         if (clickedPokemonID < 10) {
-            return "#00" + clickedPokemonID;
+            return String.format("%s%s", context.getString(R.string.pokemon_id_plus_2), clickedPokemonID);
         } else {
             if (clickedPokemonID < 100) {
-                return "#0" + clickedPokemonID;
+                return String.format("%s%s", context.getString(R.string.pokemon_id_plus_1), clickedPokemonID);
             } else {
-                return "#" + clickedPokemonID;
+                return String.format("%s%s", context.getString(R.string.pokemon_id_plus_0), clickedPokemonID);
             }
         }
     }
 
-    public int checkPokemonType(String typeToCheck) {
+    public int checkPokemonTypes(String typeToCheck) {
         int drawableID;
         switch (typeToCheck) {
             case "bug":

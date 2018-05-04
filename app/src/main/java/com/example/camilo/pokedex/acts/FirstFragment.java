@@ -1,9 +1,11 @@
 package com.example.camilo.pokedex.acts;
 
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,28 +18,21 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.camilo.pokedex.R;
-import com.example.camilo.pokedex.deserializers.Deserializer;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
 import com.example.camilo.pokedex.models.Pokemon;
-import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonDetailsFetcher;
-import com.google.gson.GsonBuilder;
+import com.example.camilo.pokedex.utils.Utils;
 
 import java.util.List;
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.camilo.pokedex.acts.EstadoPokemon.t2;
 
-public class firstFragment extends Fragment implements PokemonService {
+public class FirstFragment extends Fragment implements PokemonService {
 
     @BindView(R.id.tv_pokemon_details_id)
     TextView vPokemonID;
@@ -76,8 +71,8 @@ public class firstFragment extends Fragment implements PokemonService {
     @BindView(R.id.mas)
     ImageButton vInvertDataButton;
 
-    private int vCurrentPokemonID;
-    private int vClickedPokemonID;
+    private int mCurrentPokemonID;
+    private int mClickedPokemonID;
     private int mPokemonHP;
     private int mPokemonATK;
     private int mPokemonDEF;
@@ -94,8 +89,20 @@ public class firstFragment extends Fragment implements PokemonService {
     private Bitmap vClickedPokemonPhoto;
     private PokemonDetailsFetcher mPokemonDetailsFetcher;
 
-    public firstFragment() {
-        // Required empty public constructor
+    public static FirstFragment newInstance(int id, String name, Bitmap bitmap) {
+        FirstFragment fragment = new FirstFragment();
+        Bundle args = new Bundle();
+        args.putInt(Utils.EXTRA_POKEMON_ID, id);
+        args.putString(Utils.EXTRA_POKEMON_NAME, name);
+        args.putParcelable(Utils.EXTRA_POKEMON_IMAGE, bitmap);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
     }
 
     @Override
@@ -104,31 +111,39 @@ public class firstFragment extends Fragment implements PokemonService {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.pokemon_details_fragment, container, false);
         ButterKnife.bind(this, view);
-        vCurrentPokemonID = vClickedPokemonID;
-        vClickedPokemonID = EstadoPokemon.id;
+
+        mCurrentPokemonID = mClickedPokemonID;
+        mClickedPokemonID = EstadoPokemon.id;
         vClickedPokemonName = EstadoPokemon.nameP;
         vClickedPokemonPhoto = EstadoPokemon.bitmap;
         mPokemonDetailsFetcher = new PokemonDetailsFetcher();
 
+        init();
+
+        return view;
+    }
+
+    private void init(){
         // Change between numbers and letters
         vInvertDataButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (mShowNumbers == 1) {
-                    vTitleHP.setText("" + mPokemonHP);
-                    vTitleATK.setText("" + mPokemonATK);
-                    vTitleDEF.setText("" + mPokemonDEF);
-                    vTitleSPD.setText("" + mPokemonSATK);
-                    vTitleSDEF.setText("" + mPokemonSDEF);
-                    vTitleSATK.setText("" + mPokemonSPD);
+                    vTitleHP.setText(mPokemonHP);
+                    vTitleATK.setText(mPokemonATK);
+                    vTitleDEF.setText(mPokemonDEF);
+                    vTitleSPD.setText(mPokemonSATK);
+                    vTitleSDEF.setText(mPokemonSDEF);
+                    vTitleSATK.setText(mPokemonSPD);
                     mShowNumbers = 0;
                 } else {
-                    vTitleHP.setText("HP");
-                    vTitleATK.setText("ATK");
-                    vTitleDEF.setText("DEF");
-                    vTitleSPD.setText("SPD");
-                    vTitleSDEF.setText("SD");
-                    vTitleSATK.setText("SA");
+                    Resources res = getResources();
+                    vTitleHP.setText(res.getString(R.string.pokemon_details_hp_title));
+                    vTitleATK.setText(res.getString(R.string.pokemon_details_atk_title));
+                    vTitleDEF.setText(res.getString(R.string.pokemon_details_def_title));
+                    vTitleSATK.setText(res.getString(R.string.pokemon_details_sa_title));
+                    vTitleSDEF.setText(res.getString(R.string.pokemon_details_sd_title));
+                    vTitleSPD.setText(res.getString(R.string.pokemon_details_spd_title));
                     mShowNumbers = 1;
                 }
             }
@@ -137,29 +152,26 @@ public class firstFragment extends Fragment implements PokemonService {
         applyFonts();
 
         // Check if the user already see that pokemon
-        if (vCurrentPokemonID == vClickedPokemonID) {
-            vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(vClickedPokemonID));
+        if (mCurrentPokemonID == mClickedPokemonID) {
+            vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(getContext(), mClickedPokemonID));
 
-            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
+            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(mType1));
 
             vPokemonName.setText(vClickedPokemonName);
             vPokemonPhoto.setImageBitmap(vClickedPokemonPhoto);
 
             setBarsValues();
 
-            if (mPokemonDetailsFetcher.checkPokemonType(mType2) == 0) {
+            if (mPokemonDetailsFetcher.checkPokemonTypes(mType2) == 0) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(100, 0, 0, 0);
                 vPokemonImageType1.setLayoutParams(lp);
-            }
-            else
-            {
-                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
+            } else {
+                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(mType2));
             }
         } else {
             begin();
         }
-        return view;
     }
 
     // Apply custom font to texts
@@ -184,7 +196,7 @@ public class firstFragment extends Fragment implements PokemonService {
     }
 
     private void begin() {
-        vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(vClickedPokemonID));
+        vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(getContext(), mClickedPokemonID));
 
         // Show name and image while loading the rest of data
         vPokemonName.setText(vClickedPokemonName);
@@ -192,23 +204,13 @@ public class firstFragment extends Fragment implements PokemonService {
 
         showLoadingDialog();
 
-        mPokemonDetailsFetcher.callPokemon(vClickedPokemonID, this);
-    }
-
-    @Override
-    public void renderPokemonList(List<Pokemon> pokemonList) {
-        // Do nothing here
-    }
-
-    @Override
-    public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
-        // Do nothing here
+        mPokemonDetailsFetcher.callPokemon(mClickedPokemonID, this);
     }
 
     @Override
     public void renderPokemon(Pokemon pokemon) {
         mType1 = pokemon.getType();
-        vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType1));
+        vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(mType1));
 
         mPokemonHP = pokemon.getHp();
         mPokemonATK = pokemon.getAtk();
@@ -221,7 +223,7 @@ public class firstFragment extends Fragment implements PokemonService {
 
         // Check if Pokemon has 2nd type
         mType2 = pokemon.getType2();
-        if (mPokemonDetailsFetcher.checkPokemonType(mType2)==0) {
+        if (mPokemonDetailsFetcher.checkPokemonTypes(mType2) == 0) {
             vPokemonImageType2.setVisibility(View.INVISIBLE);
 
             // Move type 1 to center
@@ -231,13 +233,13 @@ public class firstFragment extends Fragment implements PokemonService {
 
         } else {
             vPokemonImageType2.setVisibility(View.VISIBLE);
-            vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonType(mType2));
+            vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(mType2));
         }
         mLoadingDialog.dismiss();
     }
 
     // Show loading dialog while charging
-    private void showLoadingDialog(){
+    private void showLoadingDialog() {
         mLoadingDialog = new LoadingDialog(getActivity());
         mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mLoadingDialog.setContentView(R.layout.dialog);
@@ -245,5 +247,15 @@ public class firstFragment extends Fragment implements PokemonService {
         loadingMsg.setTypeface(t2);
         Objects.requireNonNull(mLoadingDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         mLoadingDialog.show();
+    }
+
+    @Override
+    public void renderPokemonList(List<Pokemon> pokemonList) {
+        // Do nothing here
+    }
+
+    @Override
+    public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
+        // Do nothing here
     }
 }

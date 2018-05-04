@@ -40,7 +40,7 @@ public class EstadoPokemon extends AppCompatActivity  {
 
         BottomNavigationView bottomNavigationView;
 
-        getSupportFragmentManager().beginTransaction().add(R.id.layoutEstado, new firstFragment()).commit();
+        getSupportFragmentManager().beginTransaction().add(R.id.layoutEstado, new FirstFragment()).commit();
 
         //LISTENER BOTONES DEL NAVIGATION
         bottomNavigationView = findViewById(R.id.bottom_nav);
@@ -50,7 +50,7 @@ public class EstadoPokemon extends AppCompatActivity  {
                 switch (item.getItemId())
                 {
                     case R.id.action_add:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new firstFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new FirstFragment()).commit();
                         return true;
                     case R.id.action_edit:
                         getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new secondFragment()).commit();
