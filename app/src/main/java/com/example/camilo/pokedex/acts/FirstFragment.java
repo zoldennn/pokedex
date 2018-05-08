@@ -172,7 +172,6 @@ public class FirstFragment extends Fragment implements PokemonService {
             vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
 
             setValues(pokemon);
-            //setBarsValues();
 
             if (mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()) == 0) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
@@ -198,16 +197,7 @@ public class FirstFragment extends Fragment implements PokemonService {
         vTitleSATK.setTypeface(t2);
     }
 
-    private void setBarsValues() {
-        vBarHP.setProgress(mPokemonHP);
-        vBarATK.setProgress(mPokemonATK);
-        vBarDEF.setProgress(mPokemonDEF);
-        vBarSPD.setProgress(mPokemonSPD);
-        vBarSATK.setProgress(mPokemonSATK);
-        vBarSDEF.setProgress(mPokemonSDEF);
-    }
-
-    private void setValues(Pokemon pokemon){
+    private void setValues(Pokemon pokemon) {
         vBarHP.setProgress(pokemon.getHp());
         vBarATK.setProgress(pokemon.getAtk());
         vBarDEF.setProgress(pokemon.getDef());
@@ -240,7 +230,7 @@ public class FirstFragment extends Fragment implements PokemonService {
         mPokemonSATK = pokemon.getSatk();
         mPokemonSDEF = pokemon.getSdf();
 
-        setBarsValues();
+        setValues(pokemon);
 
         // Check if Pokemon has 2nd type
         mType2 = pokemon.getType2();
