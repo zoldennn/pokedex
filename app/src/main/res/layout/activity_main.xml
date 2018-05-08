@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/negro"
+    android:background="@color/black"
     android:orientation="vertical"
     tools:mContext="com.example.camilo.pokedex.acts.PokemonListActivity">
 
@@ -18,7 +18,7 @@
         android:id="@+id/pokemon_list_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gris">
+        android:background="@color/gray">
 
 
     </android.support.v7.widget.RecyclerView>

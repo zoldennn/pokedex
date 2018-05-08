@@ -4,7 +4,7 @@
     android:id="@+id/relativeUno"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/negro"
+    android:background="@color/black"
     tools:mContext="com.example.camilo.pokedex.acts.FirstFragment"
     android:orientation="vertical">
 
@@ -28,7 +28,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/gris"
+        android:background="@color/gray"
         android:gravity="center_horizontal"
         android:orientation="vertical">
 
