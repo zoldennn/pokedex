@@ -3,33 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/negro"
     android:orientation="vertical"
     tools:mContext="com.example.camilo.pokedex.acts.PokemonListActivity">
 
-    <LinearLayout
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:id="@+id/viewTittle"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="6"
-            android:paddingLeft="5dp"
-            android:text="Pokedex"
-            android:textColor="@android:color/white"
-            android:textSize="24sp" />
-
-        <ImageButton
-            android:id="@+id/imageButton"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@null"
-            android:src="@android:drawable/ic_menu_help" />
-    </LinearLayout>
+        android:layout_height="60dp"
+        app:layout_collapseMode="pin" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/pokemon_list_recyclerview"

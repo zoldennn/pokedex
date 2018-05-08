@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
     private GridLayoutManager mLayoutManager;
     private PokemonListFetcher mPokemonListFetcher;
     private LoadingDialog mLoadingDialog;
+    private Toolbar mToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,11 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
+        mToolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setIcon(R.drawable.pokelogo1);
         setupRecyclerView();
+
         showLoadingDialog();
 
         mMustCharge = true; // This var avoids to make api calls continuously
@@ -58,14 +64,14 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
     @Override
     public void renderPokemonList(List<Pokemon> pokemonList) {
         mPokemonListAdapter.addNewPokemonList(pokemonList);
-        mLoadingDialog.dismiss();
+        //mLoadingDialog.dismiss();
     }
 
     @Override
     public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
         Intent intent = new Intent(PokemonListActivity.this, EstadoPokemon.class)
                 .putExtra(Utils.EXTRA_POKEMON_NAME, pokemon.getName())
-                .putExtra(Utils.EXTRA_POKEMON_ID, pos);
+                .putExtra(Utils.EXTRA_POKEMON_ID, pos+1);
 
         if (img.getDrawable() != null)  // Check if the image loaded successfully to be passed on intent
         {
@@ -75,6 +81,11 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
         } else {
             Toast.makeText(this, getString(R.string.pokemon_list_image_msg), Toast.LENGTH_SHORT).show();
         }
+    }
+
+    @Override
+    public void renderPokemon(Pokemon pokemon) {
+        // Do nothing here
     }
 
     // Setup the RecyclerView, GridLayoutManager and Adapter
