@@ -13,24 +13,27 @@
         android:layout_height="wrap_content"
         app:srcCompat="@drawable/pokelogo" />
 
+    <!-- For now, keep progress mocked -->
     <ProgressBar
-        android:id="@+id/progressBar4"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="wrap_content"
+        android:id="@+id/pb_colored"
+        style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="128dp"
-        android:indeterminate="false"
-        android:progressDrawable="@drawable/custom_progress_bar" />
+        android:layout_marginBottom="144dp"
+        android:progress="70"
+        android:progressBackgroundTint="#e08e00"
+        android:progressTint="#ffae00"
+        android:scaleY="3" />
 
     <TextView
         android:id="@+id/textView2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/progressBar4"
+        android:layout_height="30dp"
+        android:layout_alignTop="@+id/pb_colored"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="-128dp"
+        android:layout_marginTop="30dp"
         android:text="@string/loading_msg"
         android:textColor="@android:color/white"
         android:textSize="20sp" />
