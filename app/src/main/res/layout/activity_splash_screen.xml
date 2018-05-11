@@ -11,7 +11,9 @@
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@drawable/pokelogo" />
+        android:layout_centerHorizontal="false"
+        android:layout_centerVertical="true"
+        app:srcCompat="@drawable/img_pokedex_logo" />
 
     <!-- For now, keep progress mocked -->
     <ProgressBar
@@ -25,7 +27,8 @@
         android:progress="70"
         android:progressBackgroundTint="#e08e00"
         android:progressTint="#ffae00"
-        android:scaleY="3" />
+        android:scaleY="3"
+        android:layout_below="@+id/imageView"/>
 
     <TextView
         android:id="@+id/textView2"
@@ -36,6 +39,7 @@
         android:layout_marginTop="30dp"
         android:text="@string/loading_msg"
         android:textColor="@android:color/white"
-        android:textSize="20sp" />
+        android:textSize="20sp"
+        android:layout_below="@+id/pb_colored"/>
 
 </RelativeLayout>

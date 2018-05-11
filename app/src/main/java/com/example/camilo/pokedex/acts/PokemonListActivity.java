@@ -54,7 +54,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
 
         mToolbar = findViewById(R.id.toolbar);
         setSupportActionBar(mToolbar);
-        getSupportActionBar().setIcon(R.drawable.pokelogo1);
+        getSupportActionBar().setIcon(R.drawable.img_pokedex_toolbar_logo);
         setupRecyclerView();
 
         Intent intent = getIntent();
