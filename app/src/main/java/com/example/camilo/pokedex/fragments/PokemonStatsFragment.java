@@ -31,7 +31,7 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.camilo.pokedex.acts.PokemonViewActivity.t2;
+import static com.example.camilo.pokedex.acts.PokemonViewActivity.mCustomFont;
 
 public class PokemonStatsFragment extends Fragment implements PokemonService {
 
@@ -187,14 +187,14 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
 
     // Apply custom font to texts
     private void applyFonts() {
-        vPokemonName.setTypeface(t2);
-        vPokemonID.setTypeface(t2);
-        vTitleHP.setTypeface(t2);
-        vTitleATK.setTypeface(t2);
-        vTitleDEF.setTypeface(t2);
-        vTitleSPD.setTypeface(t2);
-        vTitleSDEF.setTypeface(t2);
-        vTitleSATK.setTypeface(t2);
+        vPokemonName.setTypeface(mCustomFont);
+        vPokemonID.setTypeface(mCustomFont);
+        vTitleHP.setTypeface(mCustomFont);
+        vTitleATK.setTypeface(mCustomFont);
+        vTitleDEF.setTypeface(mCustomFont);
+        vTitleSPD.setTypeface(mCustomFont);
+        vTitleSDEF.setTypeface(mCustomFont);
+        vTitleSATK.setTypeface(mCustomFont);
     }
 
     private void setValues(Pokemon pokemon) {
@@ -255,7 +255,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
         mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         mLoadingDialog.setContentView(R.layout.dialog);
         TextView loadingMsg = mLoadingDialog.findViewById(R.id.cargando); // Need this TextView to set TypeFace
-        loadingMsg.setTypeface(t2);
+        loadingMsg.setTypeface(mCustomFont);
         Objects.requireNonNull(mLoadingDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
         mLoadingDialog.show();
     }
