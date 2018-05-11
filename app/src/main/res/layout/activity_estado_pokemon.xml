@@ -15,7 +15,7 @@
         android:layout_height="50dp"
         android:layout_alignParentBottom="true"
         android:elevation="4dp"
-        app:itemBackground="@color/negro"
+        app:itemBackground="@color/black"
         app:itemIconTint="#fff"
         app:itemTextColor="#fff"
         app:menu="@menu/bottom_navigation_main"

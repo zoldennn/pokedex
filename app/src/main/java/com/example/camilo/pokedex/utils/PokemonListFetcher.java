@@ -1,5 +1,6 @@
 package com.example.camilo.pokedex.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.models.PokemonResponse;
 import com.example.camilo.pokedex.services.ApiCallService;
@@ -56,7 +58,7 @@ public class PokemonListFetcher {
                     mPokemonList = pokemonResponse.getResults();
                     mPokemonService.renderPokemonList(mPokemonList);
                 } else {
-                    Toast.makeText(mContext, "Se detectó un problema de conexión", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, mContext.getString(R.string.api_call_error), Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -93,19 +95,20 @@ public class PokemonListFetcher {
 
     private void showAlert(){
         AlertDialog.Builder builder1 = new AlertDialog.Builder(mContext);
-        builder1.setMessage("Write your message here.");
+        builder1.setMessage(mContext.getString(R.string.api_call_error));
         builder1.setCancelable(true);
 
         builder1.setPositiveButton(
-                "No",
+                "Salir de la app",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
-                        dialog.cancel();
+                        Activity myActivity = (Activity) mContext;
+                        myActivity.finish();
                     }
                 });
 
         builder1.setNegativeButton(
-                "Yes",
+                "Reintentar",
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         callPokemonApi();

@@ -14,6 +14,9 @@
     <string name="pokemon_details_sa_title">SA</string>
     <string name="pokemon_details_sd_title">SD</string>
     <string name="pokemon_details_spd_title">SPD</string>
+    <string name="loading_msg">Cargando..</string>
+    <string name="api_call_error">Hubo un error de conexión \n
+        Si el error persiste, reinicia la aplicación</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_first_fragment">Hello FIRST fragment</string>

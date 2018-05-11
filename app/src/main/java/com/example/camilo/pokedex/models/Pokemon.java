@@ -1,7 +1,8 @@
 package com.example.camilo.pokedex.models;
 
+import java.io.Serializable;
 
-public class Pokemon {
+public class Pokemon implements Serializable{
 
     public static int number;
     private String name;
@@ -37,7 +38,7 @@ public class Pokemon {
 
     public int getNumber() {
         String[] urlPartes = url.split("/");
-        return Integer.parseInt(urlPartes[urlPartes.length-1]);
+        return Integer.parseInt(urlPartes[urlPartes.length - 1]);
     }
 
     public void setNumber(int number) {
