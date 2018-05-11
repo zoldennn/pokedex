@@ -30,7 +30,7 @@ public class PokemonListFetcher {
 
     private List<Pokemon> mPokemonList = new ArrayList<>();
     private PokemonService mPokemonService;
-    private int mOffset;
+    private static int mOffset;
     private Context mContext;
 
     public PokemonListFetcher(Context context, int offset, PokemonService listener) {

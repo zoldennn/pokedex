@@ -13,6 +13,7 @@ import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonListFetcher;
+import com.example.camilo.pokedex.utils.Utils;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -40,8 +41,8 @@ public class SplashScreen extends AppCompatActivity implements PokemonService {
     public void renderPokemonList(List<Pokemon> pokemonList) {
         Intent intent = new Intent(this, PokemonListActivity.class);
         Bundle extras = new Bundle();
-        extras.putSerializable("lista", (Serializable) pokemonList);
-        intent.putExtra("bundle", extras);
+        extras.putSerializable(Utils.EXTRA_POKEDEX_LIST, (Serializable) pokemonList);
+        intent.putExtra(Utils.EXTRA_POKEDEX_BUNDLE, extras);
         startActivity(intent);
     }
 

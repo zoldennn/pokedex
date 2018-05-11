@@ -1,4 +1,4 @@
-package com.example.camilo.pokedex.acts;
+package com.example.camilo.pokedex.fragments;
 
 
 import android.content.res.Resources;
@@ -31,9 +31,9 @@ import java.util.Objects;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.camilo.pokedex.acts.EstadoPokemon.t2;
+import static com.example.camilo.pokedex.acts.PokemonViewActivity.t2;
 
-public class FirstFragment extends Fragment implements PokemonService {
+public class PokemonStatsFragment extends Fragment implements PokemonService {
 
     @BindView(R.id.tv_pokemon_details_id)
     TextView vPokemonID;
@@ -90,8 +90,8 @@ public class FirstFragment extends Fragment implements PokemonService {
     private Bitmap mClickedPokemonPhoto;
     private PokemonDetailsFetcher mPokemonDetailsFetcher;
 
-    public static FirstFragment newInstance(int id, String name, Bitmap bitmap) {
-        FirstFragment fragment = new FirstFragment();
+    public static PokemonStatsFragment newInstance(int id, String name, Bitmap bitmap) {
+        PokemonStatsFragment fragment = new PokemonStatsFragment();
         Bundle args = new Bundle();
         args.putInt(Utils.EXTRA_POKEMON_ID, id);
         args.putString(Utils.EXTRA_POKEMON_NAME, name);

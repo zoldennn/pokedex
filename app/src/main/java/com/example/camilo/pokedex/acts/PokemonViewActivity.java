@@ -13,9 +13,12 @@ import android.view.MenuItem;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 import com.example.camilo.pokedex.R;
+import com.example.camilo.pokedex.fragments.PokemonDetailsFragment;
+import com.example.camilo.pokedex.fragments.PokemonEvolutionFragment;
+import com.example.camilo.pokedex.fragments.PokemonStatsFragment;
 import com.example.camilo.pokedex.utils.Utils;
 
-public class EstadoPokemon extends AppCompatActivity  {
+public class PokemonViewActivity extends AppCompatActivity  {
 
     public static int id;
     public static String nameP;
@@ -42,12 +45,12 @@ public class EstadoPokemon extends AppCompatActivity  {
 
         BottomNavigationView bottomNavigationView;
 
-        //getSupportFragmentManager().beginTransaction().add(R.id.layoutEstado, new FirstFragment()).commit();
+        //getSupportFragmentManager().beginTransaction().add(R.id.layoutEstado, new PokemonStatsFragment()).commit();
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-        FirstFragment fragment = FirstFragment.newInstance(id, nameP, bitmap);
+        PokemonStatsFragment fragment = PokemonStatsFragment.newInstance(id, nameP, bitmap);
         fragmentTransaction.add(R.id.layoutEstado, fragment);
         fragmentTransaction.commit();
 
@@ -62,17 +65,17 @@ public class EstadoPokemon extends AppCompatActivity  {
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
-                        FirstFragment fragment = FirstFragment.newInstance(id, nameP, bitmap);
+                        PokemonStatsFragment fragment = PokemonStatsFragment.newInstance(id, nameP, bitmap);
                         fragmentTransaction.add(R.id.layoutEstado, fragment);
                         fragmentTransaction.commit();
 
-                        //getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new FirstFragment()).commit();
+                        //getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new PokemonStatsFragment()).commit();
                         return true;
                     case R.id.action_edit:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new secondFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new PokemonDetailsFragment()).commit();
                         return true;
                     case R.id.action_del:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new thirdFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new PokemonEvolutionFragment()).commit();
                         return true;
                 }
                 return true;

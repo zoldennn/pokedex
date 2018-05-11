@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="#393E46"
     android:orientation="vertical"
-    tools:mContext="com.example.camilo.pokedex.acts.EstadoPokemon">
+    tools:mContext="com.example.camilo.pokedex.acts.PokemonViewActivity">
 
     <android.support.design.widget.BottomNavigationView
         android:id="@+id/bottom_nav"

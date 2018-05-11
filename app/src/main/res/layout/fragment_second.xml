@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/gray"
-    tools:mContext="com.example.camilo.pokedex.acts.FirstFragment"
+    tools:mContext="com.example.camilo.pokedex.fragments.PokemonStatsFragment"
     android:orientation="vertical">
 
 

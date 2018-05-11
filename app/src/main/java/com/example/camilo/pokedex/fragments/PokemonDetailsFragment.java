@@ -1,4 +1,4 @@
-package com.example.camilo.pokedex.acts;
+package com.example.camilo.pokedex.fragments;
 
 
 import android.os.Bundle;
@@ -9,9 +9,9 @@ import android.view.ViewGroup;
 
 import com.example.camilo.pokedex.R;
 
-public class secondFragment extends Fragment {
+public class PokemonDetailsFragment extends Fragment {
 
-    public secondFragment() {
+    public PokemonDetailsFragment() {
         // Required empty public constructor
     }
 
