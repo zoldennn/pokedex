@@ -1,8 +1,6 @@
 package com.example.camilo.pokedex.utils;
 
 import android.content.Context;
-import android.view.View;
-import android.widget.LinearLayout;
 
 import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
@@ -20,7 +18,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PokemonDetailsFetcher {
 
-    public void callPokemon(final int pokemonID, final PokemonService service){
+    public void callPokemon(final int pokemonID, final PokemonService service) {
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(Pokemon.class, new Deserializer());
 
@@ -50,7 +48,7 @@ public class PokemonDetailsFetcher {
         });
     }
 
-    public String getViewedPokemonID(Context context, int clickedPokemonID) {
+    public String transformPokemonID(Context context, int clickedPokemonID) {
         if (clickedPokemonID < 10) {
             return String.format("%s%s", context.getString(R.string.pokemon_id_plus_2), clickedPokemonID);
         } else {

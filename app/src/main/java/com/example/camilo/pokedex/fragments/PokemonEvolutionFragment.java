@@ -1,5 +1,4 @@
-package com.example.camilo.pokedex.acts;
-
+package com.example.camilo.pokedex.fragments;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,12 +8,14 @@ import android.view.ViewGroup;
 
 import com.example.camilo.pokedex.R;
 
-public class thirdFragment extends Fragment {
+public class PokemonEvolutionFragment extends Fragment {
 
-    public thirdFragment() {
-        // Required empty public constructor
+    public static PokemonEvolutionFragment newInstance() {
+        PokemonEvolutionFragment fragment = new PokemonEvolutionFragment();
+        Bundle args = new Bundle();
+        fragment.setArguments(args);
+        return fragment;
     }
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -22,5 +23,4 @@ public class thirdFragment extends Fragment {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_third, container, false);
     }
-
 }
