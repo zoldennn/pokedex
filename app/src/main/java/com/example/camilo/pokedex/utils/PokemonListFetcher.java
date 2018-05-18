@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.camilo.pokedex.R;
@@ -26,7 +25,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 import static com.example.camilo.pokedex.acts.PokemonListActivity.mMustCharge;
 
-public class PokemonListFetcher {
+public class PokemonListFetcher{
 
     private List<Pokemon> mPokemonList = new ArrayList<>();
     private PokemonService mPokemonService;
@@ -64,7 +63,6 @@ public class PokemonListFetcher {
 
             @Override
             public void onFailure(Call<PokemonResponse> call, Throwable t) {
-                // If error, call API again
                 mMustCharge = true;
                 showAlert();
             }

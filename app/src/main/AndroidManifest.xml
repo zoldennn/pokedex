@@ -19,7 +19,7 @@
         <activity
             android:name=".acts.PokemonViewActivity"
             android:theme="@style/AppNoBar" />
-        <activity android:name=".acts.SplashScreen" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+        <activity android:name=".acts.SplashScreenActivity" android:theme="@style/Theme.AppCompat.Light.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

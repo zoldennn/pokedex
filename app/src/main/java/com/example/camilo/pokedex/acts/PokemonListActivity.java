@@ -43,9 +43,8 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
 
         setupRecyclerView();
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getBundleExtra(Utils.EXTRA_POKEDEX_BUNDLE);
-        List<Pokemon> pokemonList = (List<Pokemon>) bundle.getSerializable(Utils.EXTRA_POKEDEX_LIST);
+        Bundle pokemonExtras = getIntent().getBundleExtra(Utils.EXTRA_POKEDEX_BUNDLE);
+        List<Pokemon> pokemonList = (List<Pokemon>) pokemonExtras.getSerializable(Utils.EXTRA_POKEDEX_LIST);
         if (pokemonList != null) {
             mPokemonListAdapter.addNewPokemonList(pokemonList);
         }

@@ -2,7 +2,6 @@ package com.example.camilo.pokedex.acts;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
@@ -16,16 +15,14 @@ import com.example.camilo.pokedex.utils.PokemonListFetcher;
 import com.example.camilo.pokedex.utils.Utils;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
-public class SplashScreen extends AppCompatActivity implements PokemonService {
-
-    private PokemonListFetcher mPokemonListFetcher;
+public class SplashScreenActivity extends AppCompatActivity implements PokemonService {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         // To fullscreen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -33,8 +30,8 @@ public class SplashScreen extends AppCompatActivity implements PokemonService {
 
         setContentView(R.layout.activity_splash_screen);
 
-        mPokemonListFetcher = new PokemonListFetcher(this, 0, this); // Instantiate this class to make the calls
-        mPokemonListFetcher.callPokemonApi(); // Make API call
+        PokemonListFetcher pokemonListFetcher = new PokemonListFetcher(this, 0, this); // Instantiate this class to make the calls
+        pokemonListFetcher.callPokemonApi(); // Make API call
     }
 
     @Override

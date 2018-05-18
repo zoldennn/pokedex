@@ -1,7 +1,5 @@
 package com.example.camilo.pokedex.fragments;
 
-
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -73,19 +71,8 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     ImageButton vInvertDataButton;
 
     private int mCurrentPokemonID;
-    private int mClickedPokemonID;
-    private int mPokemonHP;
-    private int mPokemonATK;
-    private int mPokemonDEF;
-    private int mPokemonSATK;
-    private int mPokemonSDEF;
-    private int mPokemonSPD;
-    private int mShowNumbers = 1;
-
+    private int mLastClickedPokemonID;
     private String vClickedPokemonName;
-    private String mType1;
-    private String mType2;
-
     private LoadingDialog mLoadingDialog;
     private Bitmap mClickedPokemonPhoto;
     private PokemonDetailsFetcher mPokemonDetailsFetcher;
@@ -102,11 +89,11 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
-        mClickedPokemonID = getArguments().getInt(Utils.EXTRA_POKEMON_ID);
-        if (Utils.EXTRA_POKEMON_OLD_ID == mClickedPokemonID) {
-            mCurrentPokemonID = mClickedPokemonID;
+        mLastClickedPokemonID = getArguments().getInt(Utils.EXTRA_POKEMON_ID);
+        if (Utils.EXTRA_POKEMON_OLD_ID == mLastClickedPokemonID) {
+            mCurrentPokemonID = mLastClickedPokemonID;
         } else {
-            Utils.EXTRA_POKEMON_OLD_ID = mClickedPokemonID;
+            Utils.EXTRA_POKEMON_OLD_ID = mLastClickedPokemonID;
         }
         mClickedPokemonPhoto = getArguments().getParcelable(Utils.EXTRA_POKEMON_IMAGE);
         vClickedPokemonName = getArguments().getString(Utils.EXTRA_POKEMON_NAME);
@@ -116,7 +103,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     @Override
     public void onPause() {
         super.onPause();
-        Utils.EXTRA_POKEMON_OLD_ID = mClickedPokemonID;
+        Utils.EXTRA_POKEMON_OLD_ID = mLastClickedPokemonID;
     }
 
     @Override
@@ -134,45 +121,21 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     }
 
     private void init() {
-        // Change between numbers and letters
-        vInvertDataButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (mShowNumbers == 1) {
-                    vTitleHP.setText(mPokemonHP);
-                    vTitleATK.setText(mPokemonATK);
-                    vTitleDEF.setText(mPokemonDEF);
-                    vTitleSPD.setText(mPokemonSATK);
-                    vTitleSDEF.setText(mPokemonSDEF);
-                    vTitleSATK.setText(mPokemonSPD);
-                    mShowNumbers = 0;
-                } else {
-                    Resources res = getResources();
-                    vTitleHP.setText(res.getString(R.string.pokemon_details_hp_title));
-                    vTitleATK.setText(res.getString(R.string.pokemon_details_atk_title));
-                    vTitleDEF.setText(res.getString(R.string.pokemon_details_def_title));
-                    vTitleSATK.setText(res.getString(R.string.pokemon_details_sa_title));
-                    vTitleSDEF.setText(res.getString(R.string.pokemon_details_sd_title));
-                    vTitleSPD.setText(res.getString(R.string.pokemon_details_spd_title));
-                    mShowNumbers = 1;
-                }
-            }
-        });
-
         applyFonts();
 
         // Check if the user already see that pokemon
-        if (mCurrentPokemonID == mClickedPokemonID) {
+        if (mCurrentPokemonID == mLastClickedPokemonID) {
             Pokemon pokemon = MyApplication.getLastPokemon();
-            vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(getContext(), mClickedPokemonID));
+            vPokemonID.setText(mPokemonDetailsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
 
             vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType()));
 
             vPokemonName.setText(vClickedPokemonName);
             vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
 
-            setValues(pokemon);
+            setBarsProgress(pokemon);
 
+            // Checks if pokemon have second type
             if (mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()) == 0) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(100, 0, 0, 0);
@@ -181,7 +144,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
                 vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()));
             }
         } else {
-            begin();
+            showBasicPokemonData();
         }
     }
 
@@ -197,7 +160,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
         vTitleSATK.setTypeface(mCustomFont);
     }
 
-    private void setValues(Pokemon pokemon) {
+    private void setBarsProgress(Pokemon pokemon) {
         vBarHP.setProgress(pokemon.getHp());
         vBarATK.setProgress(pokemon.getAtk());
         vBarDEF.setProgress(pokemon.getDef());
@@ -206,45 +169,37 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
         vBarSDEF.setProgress(pokemon.getSdf());
     }
 
-    private void begin() {
-        vPokemonID.setText(mPokemonDetailsFetcher.getViewedPokemonID(getContext(), mClickedPokemonID));
-
-        // Show name and image while loading the rest of data
+    // Show id, name and image while loading the rest of data
+    private void showBasicPokemonData() {
+        vPokemonID.setText(mPokemonDetailsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
         vPokemonName.setText(vClickedPokemonName);
         vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
-
         showLoadingDialog();
 
-        mPokemonDetailsFetcher.callPokemon(mClickedPokemonID, this);
+        mPokemonDetailsFetcher.callPokemon(mLastClickedPokemonID, this);
     }
 
     @Override
     public void renderPokemon(Pokemon pokemon) {
-        mType1 = pokemon.getType();
-        vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(mType1));
+        String pokemonType1 = pokemon.getType();
+        vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemonType1));
 
-        mPokemonHP = pokemon.getHp();
-        mPokemonATK = pokemon.getAtk();
-        mPokemonDEF = pokemon.getDef();
-        mPokemonSPD = pokemon.getSpd();
-        mPokemonSATK = pokemon.getSatk();
-        mPokemonSDEF = pokemon.getSdf();
+        // TODO: GET STATS AND SHOW ON PROGRESS BAR'S RIGHT
 
-        setValues(pokemon);
+        setBarsProgress(pokemon);
 
         // Check if Pokemon has 2nd type
-        mType2 = pokemon.getType2();
-        if (mPokemonDetailsFetcher.checkPokemonTypes(mType2) == 0) {
+        String pokemonType2 = pokemon.getType2();
+        if (mPokemonDetailsFetcher.checkPokemonTypes(pokemonType2) == 0) {
             vPokemonImageType2.setVisibility(View.INVISIBLE);
 
             // Move type 1 to center
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
             lp.setMargins(70, 0, 0, 0);
             vPokemonImageType1.setLayoutParams(lp);
-
         } else {
             vPokemonImageType2.setVisibility(View.VISIBLE);
-            vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(mType2));
+            vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemonType2));
         }
         mLoadingDialog.dismiss();
     }

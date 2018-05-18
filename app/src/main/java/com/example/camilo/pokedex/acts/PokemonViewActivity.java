@@ -24,7 +24,6 @@ public class PokemonViewActivity extends AppCompatActivity {
     private String mClickedPokemonName;
     private Bitmap mClickedPokemonImage;
     public static Typeface mCustomFont;
-    FragmentTransaction mFragmentTransaction;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +32,7 @@ public class PokemonViewActivity extends AppCompatActivity {
 
         mCustomFont = Typeface.createFromAsset(getAssets(), "fonts/roboli.ttf");
 
-        //OBTENER ID, IMAGEN Y NOMBRE DEL POKEMON CLICKEADO PARA AHORRAR DATOS Y NO VOLVER A LLAMAR API
+        // Get ID, name and image from bundle to avoid excessive data usage
         Intent intent = getIntent();
         mClickedPokemonImage = intent.getParcelableExtra(Utils.EXTRA_POKEMON_IMAGE);
         try {
@@ -49,14 +48,16 @@ public class PokemonViewActivity extends AppCompatActivity {
     private void initFragmentTransactions() {
         BottomNavigationView bottomNavigationView;
 
+        // TODO: CLEAN THIS UGLY TRANSACTIONS
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        mFragmentTransaction = fragmentManager.beginTransaction();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         PokemonStatsFragment fragment = PokemonStatsFragment.newInstance(mClickedPokemonID, mClickedPokemonName, mClickedPokemonImage);
-        mFragmentTransaction.add(R.id.layoutEstado, fragment);
-        mFragmentTransaction.commit();
+        fragmentTransaction.add(R.id.container_layout, fragment);
+        fragmentTransaction.commit();
 
-        //LISTENER BOTONES DEL NAVIGATION
+        // BottomNavigationView item listeners
         bottomNavigationView = findViewById(R.id.bottom_nav);
         bottomNavigationView.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -64,20 +65,20 @@ public class PokemonViewActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.action_add:
                         FragmentManager fragmentManager = getSupportFragmentManager();
-                        mFragmentTransaction = fragmentManager.beginTransaction();
+                        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
                         PokemonStatsFragment fragment = PokemonStatsFragment.newInstance(mClickedPokemonID, mClickedPokemonName, mClickedPokemonImage);
-                        mFragmentTransaction.add(R.id.layoutEstado, fragment);
-                        mFragmentTransaction.commit();
+                        fragmentTransaction.add(R.id.container_layout, fragment);
+                        fragmentTransaction.commit();
                         break;
                     case R.id.action_edit:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new PokemonDetailsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_layout, new PokemonDetailsFragment()).commit();
                         break;
                     case R.id.action_del:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new PokemonEvolutionFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_layout, new PokemonEvolutionFragment()).commit();
                         break;
                     default:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.layoutEstado, new PokemonStatsFragment()).commit();
+                        getSupportFragmentManager().beginTransaction().replace(R.id.container_layout, new PokemonStatsFragment()).commit();
                         break;
                 }
                 return true;
