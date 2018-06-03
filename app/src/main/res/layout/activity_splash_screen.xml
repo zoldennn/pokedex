@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:mContext="com.example.camilo.pokedex.acts.SplashScreenActivity">
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="false"
-        android:layout_centerVertical="true"
         app:srcCompat="@drawable/img_pokedex_logo" />
 
     <!-- For now, keep progress mocked -->
@@ -21,25 +21,18 @@
         style="@android:style/Widget.Holo.Light.ProgressBar.Horizontal"
         android:layout_width="225dp"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="144dp"
         android:progress="70"
         android:progressBackgroundTint="#e08e00"
         android:progressTint="#ffae00"
-        android:scaleY="3"
-        android:layout_below="@+id/imageView"/>
+        android:scaleY="3" />
 
     <TextView
         android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="30dp"
-        android:layout_alignTop="@+id/pb_colored"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="30dp"
         android:text="@string/loading_msg"
+        android:textAlignment="center"
         android:textColor="@android:color/white"
-        android:textSize="20sp"
-        android:layout_below="@+id/pb_colored"/>
+        android:textSize="20sp" />
 
-</RelativeLayout>
+</LinearLayout>

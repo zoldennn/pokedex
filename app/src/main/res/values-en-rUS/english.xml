@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Pokedex</string>
+    <string name="wid">19.2dp</string>
+    <string name="title_activity_tabbed">Tabbed</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="pokemon_id_plus_0">#</string>
+    <string name="pokemon_id_plus_1">#0</string>
+    <string name="pokemon_id_plus_2">#00</string>
+    <string name="pokemon_list_image_msg">Wait until the image is loaded!</string>
+    <string name="pokemon_details_hp_title">HP</string>
+    <string name="pokemon_details_atk_title">ATK</string>
+    <string name="pokemon_details_def_title">DEF</string>
+    <string name="pokemon_details_sa_title">SA</string>
+    <string name="pokemon_details_sd_title">SD</string>
+    <string name="pokemon_details_spd_title">SPD</string>
+    <string name="loading_msg">Loading..</string>
+    <string name="api_call_error">There was a connection problem :( \n
+        If the problem persists, restart the app</string>
+    <string name="pokemon_details_information_title">Information</string>
+</resources>

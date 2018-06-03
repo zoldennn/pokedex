@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:mContext="com.example.camilo.pokedex.fragments.PokemonStatsFragment"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    tools:mContext="com.example.camilo.pokedex.fragments.PokemonStatsFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,9 +38,9 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:gravity="center"
-            tools:text="#002"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="#002" />
 
         <ImageView
             android:id="@+id/img_pokemon_details_photo"
@@ -54,10 +54,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            tools:text="Bulbasaur"
             android:textAllCaps="true"
             android:textColor="@android:color/white"
-            android:textSize="20sp" />
+            android:textSize="20sp"
+            tools:text="Bulbasaur" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -82,8 +82,8 @@
 
         <TableLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal">
+            android:layout_height="match_parent"
+            android:gravity="center">
 
             <TableRow
                 android:layout_width="match_parent"
@@ -232,13 +232,6 @@
             </TableRow>
 
         </TableLayout>
-
-        <ImageButton
-            android:id="@+id/mas"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@null"
-            android:src="@android:drawable/ic_menu_revert" />
 
     </LinearLayout>
 

@@ -2,7 +2,7 @@
     <string name="app_name">Pokedex</string>
     <string name="wid">19.2dp</string>
     <string name="title_activity_tabbed">Tabbed</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Configuraciones</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="pokemon_id_plus_0">#</string>
     <string name="pokemon_id_plus_1">#0</string>
@@ -17,6 +17,7 @@
     <string name="loading_msg">Cargando..</string>
     <string name="api_call_error">Hubo un error de conexión \n
         Si el error persiste, reinicia la aplicación</string>
+    <string name="pokemon_details_information_title">Información</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_first_fragment">Hello FIRST fragment</string>

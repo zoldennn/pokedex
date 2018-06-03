@@ -9,7 +9,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
@@ -67,8 +66,6 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     ProgressBar vBarSDEF;
     @BindView(R.id.pb_pokemon_details_spd)
     ProgressBar vBarSPD;
-    @BindView(R.id.mas)
-    ImageButton vInvertDataButton;
 
     private int mCurrentPokemonID;
     private int mLastClickedPokemonID;
@@ -110,7 +107,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.pokemon_details_fragment, container, false);
+        View view = inflater.inflate(R.layout.fragment_pokemon_stats, container, false);
         ButterKnife.bind(this, view);
 
         mPokemonDetailsFetcher = new PokemonDetailsFetcher();
