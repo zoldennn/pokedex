@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
-import com.example.camilo.pokedex.deserializers.Deserializer;
+import com.example.camilo.pokedex.deserializers.PokemonStatsDeserializer;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.services.PokemonService;
@@ -16,11 +16,11 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class PokemonDetailsFetcher {
+public class PokemonStatsFetcher {
 
     public void callPokemon(final int pokemonID, final PokemonService service) {
         GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Pokemon.class, new Deserializer());
+        builder.registerTypeAdapter(Pokemon.class, new PokemonStatsDeserializer());
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")

@@ -9,7 +9,7 @@ import com.google.gson.JsonParseException;
 
 import java.lang.reflect.Type;
 
-public class Deserializer implements JsonDeserializer<Pokemon> {
+public class PokemonStatsDeserializer implements JsonDeserializer<Pokemon> {
     @Override
     public Pokemon deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 

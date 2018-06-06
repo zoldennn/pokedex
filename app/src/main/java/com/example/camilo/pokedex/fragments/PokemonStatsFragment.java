@@ -20,7 +20,7 @@ import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.services.PokemonService;
-import com.example.camilo.pokedex.utils.PokemonDetailsFetcher;
+import com.example.camilo.pokedex.utils.PokemonStatsFetcher;
 import com.example.camilo.pokedex.utils.Utils;
 
 import java.util.List;
@@ -75,7 +75,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     private String vClickedPokemonName;
     private LoadingDialog mLoadingDialog;
     private Bitmap mClickedPokemonPhoto;
-    private PokemonDetailsFetcher mPokemonDetailsFetcher;
+    private PokemonStatsFetcher mPokemonStatsFetcher;
 
     public static PokemonStatsFragment newInstance(int id, String name, Bitmap bitmap) {
         PokemonStatsFragment fragment = new PokemonStatsFragment();
@@ -110,10 +110,10 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     public View onCreateView(LayoutInflater inflater, final ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.pokemon_details_fragment, container, false);
+        View view = inflater.inflate(R.layout.pokemon_stats_fragment, container, false);
         ButterKnife.bind(this, view);
 
-        mPokemonDetailsFetcher = new PokemonDetailsFetcher();
+        mPokemonStatsFetcher = new PokemonStatsFetcher();
 
         init();
 
@@ -126,9 +126,9 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
         // Check if the user already see that pokemon
         if (mCurrentPokemonID == mLastClickedPokemonID) {
             Pokemon pokemon = MyApplication.getLastPokemon();
-            vPokemonID.setText(mPokemonDetailsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
+            vPokemonID.setText(mPokemonStatsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
 
-            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType()));
+            vPokemonImageType1.setImageResource(mPokemonStatsFetcher.checkPokemonTypes(pokemon.getType()));
 
             vPokemonName.setText(vClickedPokemonName);
             vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
@@ -136,12 +136,12 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
             setBarsProgress(pokemon);
 
             // Checks if pokemon have second type
-            if (mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()) == 0) {
+            if (mPokemonStatsFetcher.checkPokemonTypes(pokemon.getType2()) == 0) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(100, 0, 0, 0);
                 vPokemonImageType1.setLayoutParams(lp);
             } else {
-                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()));
+                vPokemonImageType2.setImageResource(mPokemonStatsFetcher.checkPokemonTypes(pokemon.getType2()));
             }
         } else {
             showBasicPokemonData();
@@ -171,18 +171,18 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
 
     // Show id, name and image while loading the rest of data
     private void showBasicPokemonData() {
-        vPokemonID.setText(mPokemonDetailsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
+        vPokemonID.setText(mPokemonStatsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
         vPokemonName.setText(vClickedPokemonName);
         vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
         showLoadingDialog();
 
-        mPokemonDetailsFetcher.callPokemon(mLastClickedPokemonID, this);
+        mPokemonStatsFetcher.callPokemon(mLastClickedPokemonID, this);
     }
 
     @Override
     public void renderPokemon(Pokemon pokemon) {
         String pokemonType1 = pokemon.getType();
-        vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemonType1));
+        vPokemonImageType1.setImageResource(mPokemonStatsFetcher.checkPokemonTypes(pokemonType1));
 
         // TODO: GET STATS AND SHOW ON PROGRESS BAR'S RIGHT
 
@@ -190,7 +190,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
 
         // Check if Pokemon has 2nd type
         String pokemonType2 = pokemon.getType2();
-        if (mPokemonDetailsFetcher.checkPokemonTypes(pokemonType2) == 0) {
+        if (mPokemonStatsFetcher.checkPokemonTypes(pokemonType2) == 0) {
             vPokemonImageType2.setVisibility(View.INVISIBLE);
 
             // Move type 1 to center
@@ -199,7 +199,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
             vPokemonImageType1.setLayoutParams(lp);
         } else {
             vPokemonImageType2.setVisibility(View.VISIBLE);
-            vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemonType2));
+            vPokemonImageType2.setImageResource(mPokemonStatsFetcher.checkPokemonTypes(pokemonType2));
         }
         mLoadingDialog.dismiss();
     }

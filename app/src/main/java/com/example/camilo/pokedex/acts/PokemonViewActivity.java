@@ -72,7 +72,12 @@ public class PokemonViewActivity extends AppCompatActivity {
                         fragmentTransaction.commit();
                         break;
                     case R.id.action_edit:
-                        getSupportFragmentManager().beginTransaction().replace(R.id.container_layout, new PokemonDetailsFragment()).commit();
+                        FragmentManager fragmentManager2 = getSupportFragmentManager();
+                        FragmentTransaction fragmentTransaction2 = fragmentManager2.beginTransaction();
+
+                        PokemonDetailsFragment pokemonDetailsFragment = PokemonDetailsFragment.newInstance(mClickedPokemonID, mClickedPokemonName, mClickedPokemonImage);
+                        fragmentTransaction2.add(R.id.container_layout, pokemonDetailsFragment);
+                        fragmentTransaction2.commit();
                         break;
                     case R.id.action_del:
                         getSupportFragmentManager().beginTransaction().replace(R.id.container_layout, new PokemonEvolutionFragment()).commit();
