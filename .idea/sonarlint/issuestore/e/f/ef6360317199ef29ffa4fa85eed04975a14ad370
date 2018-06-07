@@ -1,0 +1,8 @@
+
+Dsquid:S3010"#Remove this assignment of "number".(óäÎ¹üÿÿÿÿ8åÆ“¶½,
+Hsquid:S1444",Make this "public static number" field final(¹ö¡ş8åÆ“¶½,
+lsquid:CommentedOutCodeLine"<This block of commented-out lines of code should be removed.(Ô•÷ıúÿÿÿÿ8åÆ“¶½,
+Wsquid:S2696"6Make the enclosing method "static" or remove this set.(Ì¾÷œúÿÿÿÿ8åÆ“¶½,
+…"squid:ClassVariableVisibilityCheck"RMake number a static final constant or non-public and provide accessors if needed.(¹ö¡ş8åÆ“¶½,
+Vsquid:S2209"5Change this instance-reference to a static reference.(Ì¾÷œúÿÿÿÿ8åÆ“¶½,
+dsquid:S00107"BConstructor has 14 parameters, which is greater than 7 authorized.(­®ıÿÿÿÿÿÿ8åÆ“¶½,

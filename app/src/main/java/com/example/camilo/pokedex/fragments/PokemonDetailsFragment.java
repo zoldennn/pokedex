@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.deserializers.PokemonDetailsDeserializer;
 import com.example.camilo.pokedex.models.Pokemon;
@@ -48,6 +49,7 @@ public class PokemonDetailsFragment extends Fragment {
     }
 
     private void callApi() {
+        //Toast.makeText(getContext(), ""+ MyApplication.getLastPokemon().getNumber(), Toast.LENGTH_SHORT).show();
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(PokemonDetails.class, new PokemonDetailsDeserializer());
 
@@ -57,7 +59,7 @@ public class PokemonDetailsFragment extends Fragment {
                 .build();
 
         ApiCallService apiCallService = retrofit.create(ApiCallService.class);
-        final Call<PokemonDetails> pokemonCall = apiCallService.getPokemonDetails(6);
+        final Call<PokemonDetails> pokemonCall = apiCallService.getPokemonDetails(MyApplication.getLastPokemon().getNumber());
 
         pokemonCall.enqueue(new Callback<PokemonDetails>() {
             @Override

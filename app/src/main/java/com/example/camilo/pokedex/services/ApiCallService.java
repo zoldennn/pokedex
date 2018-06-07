@@ -17,6 +17,6 @@ public interface ApiCallService {
     @GET("pokemon/{id}")
     Call<Pokemon> getPokemon(@Path("id") int id);
 
-    @GET("pokemon/{id}")
+    @GET("pokemon-species/{id}")
     Call<PokemonDetails> getPokemonDetails(@Path("id") int pokemonId);
 }

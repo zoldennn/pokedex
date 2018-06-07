@@ -18,8 +18,9 @@ public class Pokemon implements Serializable{
     private int exp;
     private int sdf;
     private int satk;
+    private String urlSpecie;
 
-    public Pokemon(int number, String name, String url, String type, String type2, int hp, int atk, int def, int hei, int wid, int spd, int exp, int sdf, int satk) {
+    public Pokemon(int number, String name, String url, String type, String type2, int hp, int atk, int def, int hei, int wid, int spd, int exp, int sdf, int satk, String urlSpecie) {
         Pokemon.number = number;
         this.name = name;
         this.url = url;
@@ -34,6 +35,7 @@ public class Pokemon implements Serializable{
         this.exp = exp;
         this.sdf = sdf;
         this.satk = satk;
+        this.urlSpecie = urlSpecie;
     }
 
     public int getNumber() {
@@ -147,6 +149,14 @@ public class Pokemon implements Serializable{
 
     public void setSatk(int satk) {
         this.satk = satk;
+    }
+
+    public String getUrlSpecie() {
+        return urlSpecie;
+    }
+
+    public void setUrlSpecie(String urlSpecie) {
+        this.urlSpecie = urlSpecie;
     }
 
     /*    String[] urlPartes = url.split("/");

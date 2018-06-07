@@ -1,0 +1,6 @@
+
+Š"squid:ClassVariableVisibilityCheck"WMake mCustomFont a static final constant or non-public and provide accessors if needed.(šŠé8ı³Åµ½,
+jsquid:MaximumInheritanceDepth"<This class has 7 parents which is greater than 5 authorized.(âÎ€ğ8ı³Åµ½,
+Msquid:S1444"1Make this "public static mCustomFont" field final(šŠé8ı³Åµ½,
+Wsquid:S2696"6Make the enclosing method "static" or remove this set.(Şş«Öúÿÿÿÿ8ı³Åµ½,
+Ssquid:S1135"2Complete the task associated to this TODO comment.(˜ä°­ûÿÿÿÿ8ı³Åµ½,
