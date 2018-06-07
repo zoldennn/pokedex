@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.camilo.pokedex.MyApplication;
@@ -17,6 +18,7 @@ import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.utils.Utils;
 import com.google.gson.GsonBuilder;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -25,6 +27,9 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class PokemonDetailsFragment extends Fragment {
+
+    @BindView(R.id.tv_pokemon_details_description)
+    TextView vPokemonDescription;
 
     public static PokemonDetailsFragment newInstance(int id, String name, Bitmap bitmap) {
         PokemonDetailsFragment fragment = new PokemonDetailsFragment();
@@ -49,7 +54,6 @@ public class PokemonDetailsFragment extends Fragment {
     }
 
     private void callApi() {
-        //Toast.makeText(getContext(), ""+ MyApplication.getLastPokemon().getNumber(), Toast.LENGTH_SHORT).show();
         GsonBuilder builder = new GsonBuilder();
         builder.registerTypeAdapter(PokemonDetails.class, new PokemonDetailsDeserializer());
 
@@ -66,7 +70,11 @@ public class PokemonDetailsFragment extends Fragment {
             public void onResponse(Call<PokemonDetails> call, Response<PokemonDetails> response) {
                 if(response.isSuccessful()){
                     PokemonDetails pokemonDetails = response.body();
-                    Toast.makeText(getContext(), ""+pokemonDetails.getDescription(), Toast.LENGTH_SHORT).show();
+                    String desc = pokemonDetails.getDescription();
+                    desc = desc.replaceAll("\n","");
+                    assert pokemonDetails != null;
+                    vPokemonDescription.setText(desc);
+                    //Toast.makeText(getContext(), ""+pokemonDetails.getDescription(), Toast.LENGTH_SHORT).show();
                 }
 
             }
