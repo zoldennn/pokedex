@@ -25,3 +25,5 @@ Iapp/src/main/java/com/example/camilo/pokedex/services/ApiCallService.java,a\1\
 Xapp/src/main/java/com/example/camilo/pokedex/deserializers/PokemonStatsDeserializer.java,9\b\9bd066484d354db7ef4c94f25397373235ba1a49
 Š
 Zapp/src/main/java/com/example/camilo/pokedex/deserializers/PokemonDetailsDeserializer.java,3\4\344a6852465bcc36e049c9f8a65c339e376f8721
+}
+Mapp/src/main/java/com/example/camilo/pokedex/adapters/PokemonListAdapter.java,4\5\458ed8f35c2d59b90dddae61a4d53ba46bfc1806

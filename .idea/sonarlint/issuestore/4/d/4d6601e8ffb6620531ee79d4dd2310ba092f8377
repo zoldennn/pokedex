@@ -1,4 +1,5 @@
 
-Ksquid:S2696"6Make the enclosing method "static" or remove this set.(—ï¡È
-Gsquid:S1135"2Complete the task associated to this TODO comment.(å¶€ü
-Ksquid:S2696"6Make the enclosing method "static" or remove this set.(—ï¡È
+Tsquid:S2696a"6Make the enclosing method "static" or remove this set.(—ï¡È8 øµÖ½,
+Tsquid:S2696k"6Make the enclosing method "static" or remove this set.(—ï¡È8 øµÖ½,
+Qsquid:S1135¼"2Complete the task associated to this TODO comment.(å¶€ü8 øµÖ½,
+asquid:UselessImportCheck"1Remove this unused import 'android.widget.Toast'.(©›ïÍúÿÿÿÿ8 øµÖ½,

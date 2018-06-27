@@ -12,7 +12,6 @@ import android.widget.Toast;
 import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.deserializers.PokemonDetailsDeserializer;
-import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.models.PokemonDetails;
 import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.utils.Utils;
@@ -70,13 +69,8 @@ public class PokemonDetailsFragment extends Fragment {
             public void onResponse(Call<PokemonDetails> call, Response<PokemonDetails> response) {
                 if(response.isSuccessful()){
                     PokemonDetails pokemonDetails = response.body();
-                    String desc = pokemonDetails.getDescription();
-                    desc = desc.replaceAll("\n","");
-                    assert pokemonDetails != null;
-                    vPokemonDescription.setText(desc);
-                    //Toast.makeText(getContext(), ""+pokemonDetails.getDescription(), Toast.LENGTH_SHORT).show();
+                    vPokemonDescription.setText(removeUselessDescriptionSpaces(pokemonDetails.getDescription()));
                 }
-
             }
 
             @Override
@@ -84,5 +78,10 @@ public class PokemonDetailsFragment extends Fragment {
                 Toast.makeText(getContext(), "error", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // The poke descriptions comes with weird parraph spaces, this method will return a clean description
+    private String removeUselessDescriptionSpaces(String description){
+        return description.replaceAll("\n","");
     }
 }

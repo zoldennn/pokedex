@@ -1,5 +1,5 @@
 
-£%squid:RedundantThrowsDeclarationCheck"mRemove the declaration of thrown exception 'com.google.gson.JsonParseException' which is a runtime exception.(ÎŒ“¯8˜·¬¶½,
-fsquid:S1192"JDefine a constant instead of duplicating this literal "base_stat" 6 times.(žë–½8˜·¬¶½,
-ssquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³½Ž”ÿÿÿÿÿ8˜·¬¶½,
-nsquid:S00117"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Î§öÅ8˜·¬¶½,
+usquid:S00117."QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(³½Ž”ÿÿÿÿÿ8‘‘¼Ö½,
+hsquid:S1192,"JDefine a constant instead of duplicating this literal "base_stat" 6 times.(žë–½8‘‘¼Ö½,
+¥%squid:RedundantThrowsDeclarationCheck"mRemove the declaration of thrown exception 'com.google.gson.JsonParseException' which is a runtime exception.(ÎŒ“¯8‘‘¼Ö½,
+psquid:S001171"QRename this local variable to match the regular expression '^[a-z][a-zA-Z0-9]*$'.(Î§öÅ8‘‘¼Ö½,
