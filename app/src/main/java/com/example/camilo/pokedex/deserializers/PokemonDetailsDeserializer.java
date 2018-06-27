@@ -14,14 +14,15 @@ public class PokemonDetailsDeserializer implements JsonDeserializer<PokemonDetai
     @Override
     public PokemonDetails deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
 
-        JsonArray forms = json.getAsJsonObject().get("flavor_text_entries").getAsJsonArray();
-        JsonObject posicion = forms.get(3).getAsJsonObject();
-        //JsonElement urll = forms.get(0);
-        String description = posicion.getAsJsonObject().get("flavor_text").getAsString();
+        JsonArray textEntries = json.getAsJsonObject().get("flavor_text_entries").getAsJsonArray();
+        JsonObject textEntriesPosition = textEntries.get(3).getAsJsonObject();
+        String pokemonDescription = textEntriesPosition.getAsJsonObject().get("flavor_text").getAsString();
 
-        //JsonObject speciesObject = json.getAsJsonObject().get("flavor_text").getAsJsonObject();
-        //String urlSpecie = speciesObject.get("name").getAsString();
+        JsonObject habitat = json.getAsJsonObject().get("habitat").getAsJsonObject();
+        String habitatName = habitat.get("name").getAsString();
 
-        return new PokemonDetails(description);
+        String captureRate = json.getAsJsonObject().get("capture_rate").getAsString();
+
+        return new PokemonDetails(pokemonDescription, habitatName, captureRate);
     }
 }
