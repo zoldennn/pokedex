@@ -28,6 +28,7 @@ public class PokemonViewActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        this.setTheme(R.style.AppFireTheme);
         setContentView(R.layout.activity_pokemon_details);
 
         mCustomFont = Typeface.createFromAsset(getAssets(), "fonts/roboli.ttf");
