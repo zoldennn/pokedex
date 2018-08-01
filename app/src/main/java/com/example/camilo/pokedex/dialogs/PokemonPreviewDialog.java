@@ -5,17 +5,17 @@ import android.os.Bundle;
 
 import com.example.camilo.pokedex.R;
 
-public class LoadingDialog extends android.app.Dialog{
+public class PokemonPreviewDialog extends android.app.Dialog{
 
     public Activity c;
 
-    public LoadingDialog(Activity a) {
+    public PokemonPreviewDialog(Activity a) {
         super(a);
         this.c=a;
     }
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.loading_dialog);
+        setContentView(R.layout.pokemon_preview_dialog);
     }
 }

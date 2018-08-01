@@ -201,11 +201,11 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
         mLoadingDialog.dismiss();
     }
 
-    // Show loading dialog while charging
+    // Show loading loading_dialog while charging
     private void showLoadingDialog() {
         mLoadingDialog = new LoadingDialog(getActivity());
         mLoadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mLoadingDialog.setContentView(R.layout.dialog);
+        mLoadingDialog.setContentView(R.layout.loading_dialog);
         TextView loadingMsg = mLoadingDialog.findViewById(R.id.cargando); // Need this TextView to set TypeFace
         loadingMsg.setTypeface(mCustomFont);
         Objects.requireNonNull(mLoadingDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));

@@ -3,25 +3,33 @@ package com.example.camilo.pokedex.acts;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Window;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.adapters.PokemonListAdapter;
+import com.example.camilo.pokedex.dialogs.LoadingDialog;
+import com.example.camilo.pokedex.dialogs.PokemonPreviewDialog;
 import com.example.camilo.pokedex.models.Pokemon;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonListFetcher;
 import com.example.camilo.pokedex.utils.Utils;
 
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+
+import static com.example.camilo.pokedex.acts.PokemonViewActivity.mCustomFont;
 
 public class PokemonListActivity extends AppCompatActivity implements PokemonService {
 
@@ -72,7 +80,13 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
 
     @Override
     public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
-        Intent intent = new Intent(PokemonListActivity.this, PokemonViewActivity.class)
+        PokemonPreviewDialog pokemonDialog = new PokemonPreviewDialog(this);
+        pokemonDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        pokemonDialog.setContentView(R.layout.pokemon_preview_dialog);
+        Objects.requireNonNull(pokemonDialog.getWindow()).setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        pokemonDialog.show();
+
+/*        Intent intent = new Intent(PokemonListActivity.this, PokemonViewActivity.class)
                 .putExtra(Utils.EXTRA_POKEMON_NAME, pokemon.getName())
                 .putExtra(Utils.EXTRA_POKEMON_ID, pos + 1); // +1 cause RecyclerView starts on 0
 
@@ -83,7 +97,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
             startActivity(intent);
         } else {
             Toast.makeText(this, getString(R.string.pokemon_list_image_msg), Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 
     @Override
