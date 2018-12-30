@@ -19,6 +19,7 @@ import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
 import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.models.PokemonDto;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonDetailsFetcher;
 import com.example.camilo.pokedex.utils.Utils;
@@ -125,7 +126,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
 
         // Check if the user already see that pokemon
         if (mCurrentPokemonID == mLastClickedPokemonID) {
-            Pokemon pokemon = MyApplication.getLastPokemon();
+            PokemonDto pokemon = MyApplication.getLastPokemon();
             vPokemonID.setText(mPokemonDetailsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
 
             vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType()));
@@ -133,7 +134,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
             vPokemonName.setText(vClickedPokemonName);
             vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
 
-            setBarsProgress(pokemon);
+            setBarsProgress(pokemon.getStats());
 
             // Checks if pokemon have second type
             if (mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()) == 0) {
@@ -160,7 +161,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
         vTitleSATK.setTypeface(mCustomFont);
     }
 
-    private void setBarsProgress(Pokemon pokemon) {
+    private void setBarsProgress(List<PokemonStatDto> pokemonStatList) {
         vBarHP.setProgress(pokemon.getHp());
         vBarATK.setProgress(pokemon.getAtk());
         vBarDEF.setProgress(pokemon.getDef());

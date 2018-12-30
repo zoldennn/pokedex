@@ -1,6 +1,6 @@
 package com.example.camilo.pokedex.services;
 
-import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.models.PokemonDto;
 import com.example.camilo.pokedex.models.PokemonResponse;
 
 import retrofit2.Call;
@@ -14,6 +14,5 @@ public interface ApiCallService {
     Call<PokemonResponse> getPokemonList(@Query("limit") int limit, @Query("offset") int offset);
 
     @GET("pokemon/{id}")
-    Call<Pokemon> getPokemon(@Path("id") int id);
-
+    Call<PokemonDto> getPokemon(@Path("id") int id);
 }
