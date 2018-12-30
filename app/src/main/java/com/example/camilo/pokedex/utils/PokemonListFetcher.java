@@ -9,7 +9,8 @@ import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
 import com.example.camilo.pokedex.R;
-import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.models.PokeResponse;
+import com.example.camilo.pokedex.models.PokemonDto;
 import com.example.camilo.pokedex.models.PokemonResponse;
 import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.services.PokemonService;
@@ -27,7 +28,7 @@ import static com.example.camilo.pokedex.acts.PokemonListActivity.mMustCharge;
 
 public class PokemonListFetcher{
 
-    private List<Pokemon> mPokemonList = new ArrayList<>();
+    private List<PokeResponse> mPokemonList = new ArrayList<>();
     private PokemonService mPokemonService;
     private static int mOffset;
     private Context mContext;

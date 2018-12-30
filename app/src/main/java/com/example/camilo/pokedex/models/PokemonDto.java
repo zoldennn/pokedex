@@ -2,18 +2,22 @@ package com.example.camilo.pokedex.models;
 
 import android.support.annotation.VisibleForTesting;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class PokemonDto {
+public class PokemonDto implements Serializable {
 
     private List<PokemonAbilityDto> abilities;
     private int baseExperience;
+    private List<PokemonFormDto> forms;
     private int height;
     private int id;
     private List<PokemonMoveDto> moves;
+    private String name;
     private PokemonSpeciesDto species;
     private PokemonSpritesDto sprites;
     private List<PokemonStatDto> stats;
+    private List<PokemonTypeDto> types;
     private int weight;
 
     // GETTERS
@@ -25,16 +29,25 @@ public class PokemonDto {
         return baseExperience;
     }
 
+    public List<PokemonFormDto> getForms() {
+        return forms;
+    }
+
     public int getHeight() {
         return height;
     }
 
     public int getId() {
-        return id;
+        String[] urlParts = getForms().get(0).getName().split("/");
+        return Integer.parseInt(urlParts[urlParts.length - 1]);
     }
 
     public List<PokemonMoveDto> getMoves() {
         return moves;
+    }
+
+    public String getName() {
+        return name;
     }
 
     public PokemonSpeciesDto getSpecies() {
@@ -47,6 +60,10 @@ public class PokemonDto {
 
     public List<PokemonStatDto> getStats() {
         return stats;
+    }
+
+    public List<PokemonTypeDto> getTypes() {
+        return types;
     }
 
     public int getWeight() {
@@ -65,6 +82,11 @@ public class PokemonDto {
     }
 
     @VisibleForTesting
+    public void setForms(List<PokemonFormDto> pokemonForms) {
+        this.forms = pokemonForms;
+    }
+
+    @VisibleForTesting
     public void setHeight(int height) {
         this.height = height;
     }
@@ -80,6 +102,11 @@ public class PokemonDto {
     }
 
     @VisibleForTesting
+    public void setName(String name){
+        this.name = name;
+    }
+
+    @VisibleForTesting
     public void setSpecies(PokemonSpeciesDto species) {
         this.species = species;
     }
@@ -92,6 +119,11 @@ public class PokemonDto {
     @VisibleForTesting
     public void setStats(List<PokemonStatDto> stats) {
         this.stats = stats;
+    }
+
+    @VisibleForTesting
+    public void setTypes(List<PokemonTypeDto> types) {
+        this.types = types;
     }
 
     @VisibleForTesting

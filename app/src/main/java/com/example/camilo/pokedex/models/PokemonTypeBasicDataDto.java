@@ -2,7 +2,7 @@ package com.example.camilo.pokedex.models;
 
 import android.support.annotation.VisibleForTesting;
 
-public class PokemonStatBasicDataDto {
+public class PokemonTypeBasicDataDto {
 
     private String name;
     private String url;

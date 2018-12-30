@@ -18,8 +18,9 @@ import android.widget.TextView;
 import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
-import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.models.PokeResponse;
 import com.example.camilo.pokedex.models.PokemonDto;
+import com.example.camilo.pokedex.models.PokemonStatDto;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonDetailsFetcher;
 import com.example.camilo.pokedex.utils.Utils;
@@ -129,7 +130,7 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
             PokemonDto pokemon = MyApplication.getLastPokemon();
             vPokemonID.setText(mPokemonDetailsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
 
-            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType()));
+            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getTypes().get(0).getTypeBasicData().getName()));
 
             vPokemonName.setText(vClickedPokemonName);
             vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
@@ -137,12 +138,12 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
             setBarsProgress(pokemon.getStats());
 
             // Checks if pokemon have second type
-            if (mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()) == 0) {
+            if (pokemon.getTypes().size() > 0) {
                 LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
                 lp.setMargins(100, 0, 0, 0);
                 vPokemonImageType1.setLayoutParams(lp);
             } else {
-                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()));
+                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getTypes().get(1).getTypeBasicData().getName()));
             }
         } else {
             showBasicPokemonData();
@@ -161,13 +162,13 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
         vTitleSATK.setTypeface(mCustomFont);
     }
 
-    private void setBarsProgress(List<PokemonStatDto> pokemonStatList) {
-        vBarHP.setProgress(pokemon.getHp());
-        vBarATK.setProgress(pokemon.getAtk());
-        vBarDEF.setProgress(pokemon.getDef());
-        vBarSPD.setProgress(pokemon.getSpd());
-        vBarSATK.setProgress(pokemon.getSatk());
-        vBarSDEF.setProgress(pokemon.getSdf());
+    private void setBarsProgress(List<PokemonStatDto> pokemonStatDtos) {
+        vBarHP.setProgress(pokemonStatDtos.get(0).getBaseStat());
+        vBarATK.setProgress(pokemonStatDtos.get(1).getBaseStat());
+        vBarDEF.setProgress(pokemonStatDtos.get(2).getBaseStat());
+        vBarSPD.setProgress(pokemonStatDtos.get(3).getBaseStat());
+        vBarSATK.setProgress(pokemonStatDtos.get(4).getBaseStat());
+        vBarSDEF.setProgress(pokemonStatDtos.get(5).getBaseStat());
     }
 
     // Show id, name and image while loading the rest of data
@@ -181,16 +182,16 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     }
 
     @Override
-    public void renderPokemon(Pokemon pokemon) {
-        String pokemonType1 = pokemon.getType();
+    public void renderPokemon(PokemonDto pokemon) {
+        String pokemonType1 = pokemon.getTypes().get(0).getTypeBasicData().getName();
         vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemonType1));
 
         // TODO: GET STATS AND SHOW ON PROGRESS BAR'S RIGHT
 
-        setBarsProgress(pokemon);
+        setBarsProgress(pokemon.getStats());
 
         // Check if Pokemon has 2nd type
-        String pokemonType2 = pokemon.getType2();
+        String pokemonType2 = pokemon.getTypes().get(1).getTypeBasicData().getName();
         if (mPokemonDetailsFetcher.checkPokemonTypes(pokemonType2) == 0) {
             vPokemonImageType2.setVisibility(View.INVISIBLE);
 
@@ -217,12 +218,12 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     }
 
     @Override
-    public void renderPokemonList(List<Pokemon> pokemonList) {
+    public void renderPokemonList(List<PokeResponse> pokemonList) {
         // Do nothing here
     }
 
     @Override
-    public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
+    public void onPokemonItemClick(PokeResponse pokemon, int pos, ImageView img) {
         // Do nothing here
     }
 }

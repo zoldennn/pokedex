@@ -11,9 +11,11 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.adapters.PokemonListAdapter;
-import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.models.PokeResponse;
+import com.example.camilo.pokedex.models.PokemonDto;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonListFetcher;
 import com.example.camilo.pokedex.utils.Utils;
@@ -43,10 +45,15 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
 
         setupRecyclerView();
 
-        Bundle pokemonExtras = getIntent().getBundleExtra(Utils.EXTRA_POKEDEX_BUNDLE);
-        List<Pokemon> pokemonList = (List<Pokemon>) pokemonExtras.getSerializable(Utils.EXTRA_POKEDEX_LIST);
+        //Bundle pokemonExtras = getIntent().getBundleExtra(Utils.EXTRA_POKEDEX_BUNDLE);
+        //List<PokeResponse> pokemonList = (List<PokeResponse>) pokemonExtras.getParcelable(Utils.EXTRA_POKEDEX_LIST);
+
+        List<PokeResponse> pokemonList = MyApplication.getmResponseList();
+
         if (pokemonList != null) {
             mPokemonListAdapter.addNewPokemonList(pokemonList);
+        } else {
+            Toast.makeText(this, "Roompió", Toast.LENGTH_SHORT).show();
         }
         mMustCharge = true; // This var avoids to make api calls continuously
     }
@@ -66,12 +73,12 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
     }
 
     @Override
-    public void renderPokemonList(List<Pokemon> pokemonList) {
+    public void renderPokemonList(List<PokeResponse> pokemonList) {
         mPokemonListAdapter.addNewPokemonList(pokemonList);
     }
 
     @Override
-    public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
+    public void onPokemonItemClick(PokeResponse pokemon, int pos, ImageView img) {
         Intent intent = new Intent(PokemonListActivity.this, PokemonViewActivity.class)
                 .putExtra(Utils.EXTRA_POKEMON_NAME, pokemon.getName())
                 .putExtra(Utils.EXTRA_POKEMON_ID, pos + 1); // +1 cause RecyclerView starts on 0
@@ -87,7 +94,7 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
     }
 
     @Override
-    public void renderPokemon(Pokemon pokemon) {
+    public void renderPokemon(PokemonDto pokemon) {
         // Do nothing here
     }
 }
