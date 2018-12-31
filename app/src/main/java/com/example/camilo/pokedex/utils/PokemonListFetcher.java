@@ -10,7 +10,6 @@ import android.widget.Toast;
 
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.models.PokeResponse;
-import com.example.camilo.pokedex.models.PokemonDto;
 import com.example.camilo.pokedex.models.PokemonResponse;
 import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.services.PokemonService;

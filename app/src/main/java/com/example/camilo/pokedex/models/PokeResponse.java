@@ -23,6 +23,8 @@ public class PokeResponse implements Parcelable {
         return url;
     }
 
+    // This method will return pokemonID from the url
+    // https://pokeapi.co/api/v2/pokemon/1/  <---- 1
     public int getId() {
         String[] urlParts = url.split("/");
         return Integer.parseInt(urlParts[urlParts.length - 1]);
@@ -56,8 +58,13 @@ public class PokeResponse implements Parcelable {
         return 0;
     }
 
+    public void readFromParcel(Parcel in) {
+        name = in.readString();
+        url = in.readString();
+    }
+
     @Override
-    public void writeToParcel(Parcel parcel, int i) {
+    public void writeToParcel(Parcel parcel, int flags) {
         parcel.writeString(name);
         parcel.writeString(url);
     }

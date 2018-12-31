@@ -11,7 +11,6 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.adapters.PokemonListAdapter;
 import com.example.camilo.pokedex.models.PokeResponse;
@@ -20,7 +19,9 @@ import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonListFetcher;
 import com.example.camilo.pokedex.utils.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -45,17 +46,15 @@ public class PokemonListActivity extends AppCompatActivity implements PokemonSer
 
         setupRecyclerView();
 
-        //Bundle pokemonExtras = getIntent().getBundleExtra(Utils.EXTRA_POKEDEX_BUNDLE);
-        //List<PokeResponse> pokemonList = (List<PokeResponse>) pokemonExtras.getParcelable(Utils.EXTRA_POKEDEX_LIST);
+            ArrayList<PokeResponse> pokemonList  = Objects.requireNonNull(getIntent().getExtras()).getParcelableArrayList(Utils.EXTRA_POKEDEX_LIST);
 
-        List<PokeResponse> pokemonList = MyApplication.getmResponseList();
-
-        if (pokemonList != null) {
-            mPokemonListAdapter.addNewPokemonList(pokemonList);
-        } else {
-            Toast.makeText(this, "Roompió", Toast.LENGTH_SHORT).show();
-        }
-        mMustCharge = true; // This var avoids to make api calls continuously
+            if (pokemonList != null) {
+                mPokemonListAdapter.addNewPokemonList(pokemonList);
+            } else {
+                // TODO: ERROR HANDLING
+                Toast.makeText(this, "Error al traer la poke lista :(", Toast.LENGTH_SHORT).show();
+            }
+            mMustCharge = false; // This var avoids to make api calls continuously
     }
 
     // Setup the RecyclerView, GridLayoutManager and Adapter

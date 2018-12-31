@@ -9,7 +9,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
-import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
 import com.example.camilo.pokedex.models.PokeResponse;
 import com.example.camilo.pokedex.models.PokemonDto;
@@ -17,7 +16,7 @@ import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonListFetcher;
 import com.example.camilo.pokedex.utils.Utils;
 
-import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class SplashScreenActivity extends AppCompatActivity implements PokemonService {
@@ -39,12 +38,13 @@ public class SplashScreenActivity extends AppCompatActivity implements PokemonSe
 
     @Override
     public void renderPokemonList(List<PokeResponse> pokemonList) {
-        //Intent intent = new Intent(this, PokemonListActivity.class);
-        //Bundle extras = new Bundle();
-        MyApplication.setmResponseList(pokemonList);
-        //extras.putParcelableArrayList(Utils.EXTRA_POKEDEX_LIST, (Parcelable) pokemonList);
-        //intent.putExtra(Utils.EXTRA_POKEDEX_BUNDLE, extras);
-        startActivity(new Intent(this, PokemonListActivity.class));
+        Bundle extras = new Bundle();
+        extras.putParcelableArrayList(Utils.EXTRA_POKEDEX_LIST, (ArrayList<? extends Parcelable>) pokemonList);
+
+        Intent intent = new Intent(this, PokemonListActivity.class);
+        intent.putExtras(extras);
+
+        startActivity(intent);
     }
 
     @Override
