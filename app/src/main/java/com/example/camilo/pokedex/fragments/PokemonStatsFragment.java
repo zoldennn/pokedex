@@ -2,23 +2,29 @@ package com.example.camilo.pokedex.fragments;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
+import com.example.camilo.pokedex.adapters.PokemonTypesAdapter;
 import com.example.camilo.pokedex.dialogs.LoadingDialog;
-import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.models.PokeResponse;
+import com.example.camilo.pokedex.models.PokemonDto;
+import com.example.camilo.pokedex.models.PokemonStatDto;
+import com.example.camilo.pokedex.models.PokemonTypeDto;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.utils.PokemonDetailsFetcher;
 import com.example.camilo.pokedex.utils.Utils;
@@ -37,10 +43,6 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     TextView vPokemonID;
     @BindView(R.id.tv_pokemon_details_name)
     TextView vPokemonName;
-    @BindView(R.id.tv_pokemon_details_type1)
-    ImageView vPokemonImageType1;
-    @BindView(R.id.tv_pokemon_details_type2)
-    ImageView vPokemonImageType2;
     @BindView(R.id.img_pokemon_details_photo)
     ImageView vPokemonPhoto;
     @BindView(R.id.tv_pokemon_details_hp_title)
@@ -69,6 +71,8 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     ProgressBar vBarSPD;
     @BindView(R.id.mas)
     ImageButton vInvertDataButton;
+    @BindView(R.id.rv_pokemon_type)
+    RecyclerView vPokemonTypesRecyclerView;
 
     private int mCurrentPokemonID;
     private int mLastClickedPokemonID;
@@ -125,24 +129,15 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
 
         // Check if the user already see that pokemon
         if (mCurrentPokemonID == mLastClickedPokemonID) {
-            Pokemon pokemon = MyApplication.getLastPokemon();
+            PokemonDto pokemon = MyApplication.getLastPokemon();
             vPokemonID.setText(mPokemonDetailsFetcher.transformPokemonID(getContext(), mLastClickedPokemonID));
 
-            vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType()));
-
+            setupPokemonTypesRecyclerView(pokemon.getTypes());
             vPokemonName.setText(vClickedPokemonName);
             vPokemonPhoto.setImageBitmap(mClickedPokemonPhoto);
 
-            setBarsProgress(pokemon);
+            setBarsProgress(pokemon.getStats());
 
-            // Checks if pokemon have second type
-            if (mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()) == 0) {
-                LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-                lp.setMargins(100, 0, 0, 0);
-                vPokemonImageType1.setLayoutParams(lp);
-            } else {
-                vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemon.getType2()));
-            }
         } else {
             showBasicPokemonData();
         }
@@ -160,13 +155,21 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
         vTitleSATK.setTypeface(mCustomFont);
     }
 
-    private void setBarsProgress(Pokemon pokemon) {
-        vBarHP.setProgress(pokemon.getHp());
-        vBarATK.setProgress(pokemon.getAtk());
-        vBarDEF.setProgress(pokemon.getDef());
-        vBarSPD.setProgress(pokemon.getSpd());
-        vBarSATK.setProgress(pokemon.getSatk());
-        vBarSDEF.setProgress(pokemon.getSdf());
+    private void setBarsProgress(List<PokemonStatDto> pokemonStats) {
+        setStatForBar(vBarHP, pokemonStats.get(0));
+        setStatForBar(vBarATK, pokemonStats.get(1));
+        setStatForBar(vBarDEF, pokemonStats.get(2));
+        setStatForBar(vBarSPD, pokemonStats.get(3));
+        setStatForBar(vBarSATK, pokemonStats.get(4));
+        setStatForBar(vBarSDEF, pokemonStats.get(5));
+    }
+
+    private void setStatForBar(ProgressBar statBar, PokemonStatDto pokemonStatDto) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            statBar.setProgress(pokemonStatDto.getBaseStat(), true);
+        } else {
+            statBar.setProgress(pokemonStatDto.getBaseStat());
+        }
     }
 
     // Show id, name and image while loading the rest of data
@@ -180,28 +183,24 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     }
 
     @Override
-    public void renderPokemon(Pokemon pokemon) {
-        String pokemonType1 = pokemon.getType();
-        vPokemonImageType1.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemonType1));
+    public void renderPokemon(PokemonDto pokemon) {
+        // TODO: GET STATS AND SHOWS THEM AT PROGRESS BAR'S RIGHT
 
-        // TODO: GET STATS AND SHOW ON PROGRESS BAR'S RIGHT
+        setBarsProgress(pokemon.getStats());
 
-        setBarsProgress(pokemon);
+        setupPokemonTypesRecyclerView(pokemon.getTypes());
 
-        // Check if Pokemon has 2nd type
-        String pokemonType2 = pokemon.getType2();
-        if (mPokemonDetailsFetcher.checkPokemonTypes(pokemonType2) == 0) {
-            vPokemonImageType2.setVisibility(View.INVISIBLE);
-
-            // Move type 1 to center
-            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.MATCH_PARENT);
-            lp.setMargins(70, 0, 0, 0);
-            vPokemonImageType1.setLayoutParams(lp);
-        } else {
-            vPokemonImageType2.setVisibility(View.VISIBLE);
-            vPokemonImageType2.setImageResource(mPokemonDetailsFetcher.checkPokemonTypes(pokemonType2));
-        }
         mLoadingDialog.dismiss();
+    }
+
+    private void setupPokemonTypesRecyclerView(List<PokemonTypeDto> pokemonTypes) {
+        vPokemonTypesRecyclerView.setHasFixedSize(true); // For better performance
+        LinearLayoutManager mLayoutManager = new LinearLayoutManager(getContext());
+        mLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);// Horizontal scroll
+        vPokemonTypesRecyclerView.setLayoutManager(mLayoutManager);
+
+        PokemonTypesAdapter pokemonTypesAdapter= new PokemonTypesAdapter(pokemonTypes);
+        vPokemonTypesRecyclerView.setAdapter(pokemonTypesAdapter);
     }
 
     // Show loading dialog while charging
@@ -216,12 +215,12 @@ public class PokemonStatsFragment extends Fragment implements PokemonService {
     }
 
     @Override
-    public void renderPokemonList(List<Pokemon> pokemonList) {
+    public void renderPokemonList(List<PokeResponse> pokemonList) {
         // Do nothing here
     }
 
     @Override
-    public void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img) {
+    public void onPokemonItemClick(PokeResponse pokemon, int pos, ImageView img) {
         // Do nothing here
     }
 }

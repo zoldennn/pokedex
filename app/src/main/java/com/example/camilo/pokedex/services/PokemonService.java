@@ -2,14 +2,15 @@ package com.example.camilo.pokedex.services;
 
 import android.widget.ImageView;
 
-import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.models.PokeResponse;
+import com.example.camilo.pokedex.models.PokemonDto;
 
 import java.util.List;
 
 public interface PokemonService {
-    void renderPokemonList(List<Pokemon> pokemonList);
+    void renderPokemonList(List<PokeResponse> pokemonList);
 
-    void onPokemonItemClick(Pokemon pokemon, int pos, ImageView img);
+    void onPokemonItemClick(PokeResponse pokemon, int pos, ImageView img);
 
-    void renderPokemon(Pokemon pokemon);
+    void renderPokemon(PokemonDto pokemon);
 }

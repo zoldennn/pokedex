@@ -4,11 +4,9 @@ import android.content.Context;
 
 import com.example.camilo.pokedex.MyApplication;
 import com.example.camilo.pokedex.R;
-import com.example.camilo.pokedex.deserializers.Deserializer;
-import com.example.camilo.pokedex.models.Pokemon;
+import com.example.camilo.pokedex.models.PokemonDto;
 import com.example.camilo.pokedex.services.ApiCallService;
 import com.example.camilo.pokedex.services.PokemonService;
-import com.google.gson.GsonBuilder;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -19,30 +17,27 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class PokemonDetailsFetcher {
 
     public void callPokemon(final int pokemonID, final PokemonService service) {
-        GsonBuilder builder = new GsonBuilder();
-        builder.registerTypeAdapter(Pokemon.class, new Deserializer());
-
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://pokeapi.co/api/v2/")
-                .addConverterFactory(GsonConverterFactory.create(builder.create()))
+                .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         ApiCallService apiCallService = retrofit.create(ApiCallService.class);
 
         // Api call
-        Call<Pokemon> pokemonCall = apiCallService.getPokemon(pokemonID);
-        pokemonCall.enqueue(new Callback<Pokemon>() {
+        Call<PokemonDto> pokemonCall = apiCallService.getPokemon(pokemonID);
+        pokemonCall.enqueue(new Callback<PokemonDto>() {
             @Override
-            public void onResponse(Call<Pokemon> call, Response<Pokemon> response) {
+            public void onResponse(Call<PokemonDto> call, Response<PokemonDto> response) {
                 if (response.isSuccessful()) {
-                    Pokemon pokemon = response.body();
+                    PokemonDto pokemon = response.body();
                     MyApplication.setLastPokemon(pokemon);
                     service.renderPokemon(pokemon);
                 }
             }
 
             @Override
-            public void onFailure(Call<Pokemon> call, Throwable t) {
+            public void onFailure(Call<PokemonDto> call, Throwable t) {
                 callPokemon(pokemonID, service);
             }
         });

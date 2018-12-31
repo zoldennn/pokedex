@@ -10,9 +10,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.camilo.pokedex.models.PokeResponse;
+import com.example.camilo.pokedex.models.PokemonDto;
 import com.example.camilo.pokedex.services.PokemonService;
 import com.example.camilo.pokedex.R;
-import com.example.camilo.pokedex.models.Pokemon;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -25,7 +26,7 @@ import butterknife.ButterKnife;
 public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.AdapterViewHolder> {
 
     private Context mContext;
-    private List<Pokemon> mDataSet;
+    private List<PokeResponse> mDataSet;
     private PokemonService mPokemonService;
 
     public PokemonListAdapter(Context context, PokemonService listener) {
@@ -42,8 +43,8 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
 
     @Override
     public void onBindViewHolder(AdapterViewHolder holder, int position) {
-        Pokemon pokemon = mDataSet.get(position);
-        Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + pokemon.getNumber() + ".png").into(holder.vPokemonPhoto);
+        PokeResponse pokemon = mDataSet.get(position);
+        Picasso.get().load("https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" + pokemon.getId() + ".png").into(holder.vPokemonPhoto);
 
         holder.bind(pokemon.getName());
     }
@@ -54,7 +55,7 @@ public class PokemonListAdapter extends RecyclerView.Adapter<PokemonListAdapter.
     }
 
     // Add the new 20 incoming pokemon
-    public void addNewPokemonList(List<Pokemon> pokemonList) {
+    public void addNewPokemonList(List<PokeResponse> pokemonList) {
         mDataSet.addAll(pokemonList);
         notifyDataSetChanged();
     }
